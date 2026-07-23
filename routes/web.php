@@ -4,6 +4,11 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ServiceController;
 
 Route::prefix('admin')->group(function () {
 
@@ -41,6 +46,22 @@ Route::prefix('admin')->group(function () {
         // Categories CRUD
         Route::resource('categories', CategoryController::class)
             ->names('admin.categories');
+
+        Route::resource('companies', CompanyController::class)
+            ->names('admin.companies');
+
+        Route::resource('users', UserController::class)
+            ->names('admin.users');
+
+        Route::resource('enquiries', EnquiryController::class)
+            ->names('admin.enquiries');
+
+        Route::prefix('listings')->name('admin.listings.')->group(function () {
+
+            Route::resource('products', ProductController::class);
+
+            Route::resource('services', ServiceController::class);
+        });
 
         // Toggle Category Status
         Route::patch(
