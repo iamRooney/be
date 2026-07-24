@@ -18,17 +18,17 @@
 
             <!-- Search -->
 
-            <div class="position-relative me-3 d-none d-lg-block">
+            {{-- <div class="position-relative me-3 d-none d-lg-block">
 
                 <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
 
                 <input type="text" class="form-control rounded-pill ps-5" placeholder="Search..." style="width:250px;">
 
-            </div>
+            </div> --}}
 
             <!-- Notification -->
 
-            <button class="btn btn-light rounded-circle me-3 position-relative">
+            {{-- <button class="btn btn-light rounded-circle me-3 position-relative">
 
                 <i class="bi bi-bell fs-5"></i>
 
@@ -38,7 +38,7 @@
 
                 </span>
 
-            </button>
+            </button> --}}
 
             <!-- Profile -->
 

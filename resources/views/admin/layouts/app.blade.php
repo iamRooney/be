@@ -11,6 +11,19 @@
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        .main-wrapper {
+            margin-left: 270px;
+            width: calc(100% - 270px);
+            transition: margin-left .25s ease, width .25s ease;
+        }
+
+        .main-wrapper.sidebar-collapsed {
+            margin-left: 84px;
+            width: calc(100% - 84px);
+        }
+    </style>
 </head>
 
 <body>
@@ -19,7 +32,7 @@
 
         @include('admin.partials.sidebar')
 
-        <div class="flex-grow-1 d-flex flex-column min-vh-100">
+        <div class="flex-grow-1 d-flex flex-column min-vh-100 main-wrapper">
 
             @include('admin.partials.navbar')
 

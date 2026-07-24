@@ -9,153 +9,83 @@
     }
 @endphp
 
-<div class="sidebar">
+<div class="sidebar" id="adminSidebar">
 
-    <div class="brand">
-        <div class="brand-icon">
-            <i class="bi bi-boxes"></i>
+    <div class="sidebar-top">
+        <div class="brand">
+            <div class="brand-icon">
+                <img src="{{ asset('/uploads/logo/head.png') }}" alt="Exbhex logo">
+            </div>
+            <div class="brand-text">
+                <h4>Exbhex</h4>
+                <small>Superadmin Panel</small>
+            </div>
         </div>
-        <div>
-            <h4>Exbhex</h4>
-            <small>Superadmin Panel</small>
-        </div>
+
+        <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar">
+            <i class="bi bi-list"></i>
+        </button>
     </div>
 
     <div class="menu-title">MAIN</div>
 
-    <a href="{{ navLink('admin.dashboard') }}" class="menu-item {{ $route == 'admin.dashboard' ? 'active' : '' }}">
+    <a href="{{ navLink('admin.dashboard') }}" title="Dashboard"
+        class="menu-item {{ $route == 'admin.dashboard' ? 'active' : '' }}">
         <i class="bi bi-grid-fill"></i>
         <span>Dashboard</span>
     </a>
 
     <div class="menu-title">MANAGEMENT</div>
 
-    {{-- COMPANIES --}}
-    <button class="menu-item menu-parent {{ str_contains($route, 'companies') ? 'active' : '' }}"
-        data-bs-toggle="collapse" data-bs-target="#menuCompanies"
-        aria-expanded="{{ str_contains($route, 'companies') ? 'true' : 'false' }}">
+    <a href="{{ navLink('admin.companies.index') }}" title="Companies"
+        class="menu-item {{ str_contains($route, 'companies') ? 'active' : '' }}">
         <i class="bi bi-building"></i>
         <span>Companies</span>
-        <i class="bi bi-chevron-down chevron"></i>
-    </button>
-    <div class="collapse submenu {{ str_contains($route, 'companies') ? 'show' : '' }}" id="menuCompanies">
-        <a href="{{ navLink('admin.companies.index') }}"
-            class="submenu-item {{ $route == 'admin.companies.index' ? 'active' : '' }}">All companies</a>
-        <a href="{{ navLink('admin.companies.pending') }}"
-            class="submenu-item {{ $route == 'admin.companies.pending' ? 'active' : '' }}">Pending verification</a>
-        <a href="{{ navLink('admin.companies.verified') }}"
-            class="submenu-item {{ $route == 'admin.companies.verified' ? 'active' : '' }}">Verified companies</a>
-        <a href="{{ navLink('admin.companies.rejected') }}"
-            class="submenu-item {{ $route == 'admin.companies.rejected' ? 'active' : '' }}">Rejected companies</a>
-    </div>
+    </a>
 
-    {{-- USERS --}}
-    <button class="menu-item menu-parent {{ str_contains($route, 'users') ? 'active' : '' }}" data-bs-toggle="collapse"
-        data-bs-target="#menuUsers" aria-expanded="{{ str_contains($route, 'users') ? 'true' : 'false' }}">
+    <a href="{{ navLink('admin.users.index') }}" title="Users"
+        class="menu-item {{ str_contains($route, 'users') ? 'active' : '' }}">
         <i class="bi bi-people-fill"></i>
         <span>Users</span>
-        <i class="bi bi-chevron-down chevron"></i>
-    </button>
-    <div class="collapse submenu {{ str_contains($route, 'users') ? 'show' : '' }}" id="menuUsers">
-        <a href="{{ navLink('admin.users.index') }}"
-            class="submenu-item {{ $route == 'admin.users.index' ? 'active' : '' }}">All users</a>
-        <a href="{{ navLink('admin.users.buyers') }}"
-            class="submenu-item {{ $route == 'admin.users.buyers' ? 'active' : '' }}">Buyers</a>
-        <a href="{{ navLink('admin.users.sellers') }}"
-            class="submenu-item {{ $route == 'admin.users.sellers' ? 'active' : '' }}">Sellers</a>
-        <a href="{{ navLink('admin.users.active') }}"
-            class="submenu-item {{ $route == 'admin.users.active' ? 'active' : '' }}">Active users</a>
-        <a href="{{ navLink('admin.users.suspended') }}"
-            class="submenu-item {{ $route == 'admin.users.suspended' ? 'active' : '' }}">Suspended users</a>
-    </div>
+    </a>
 
-    {{-- ENQUIRIES --}}
-    <button class="menu-item menu-parent {{ str_contains($route, 'enquiries') ? 'active' : '' }}"
-        data-bs-toggle="collapse" data-bs-target="#menuEnquiries"
-        aria-expanded="{{ str_contains($route, 'enquiries') ? 'true' : 'false' }}">
+    <a href="{{ navLink('admin.enquiries.index') }}" title="Enquiries"
+        class="menu-item {{ str_contains($route, 'enquiries') ? 'active' : '' }}">
         <i class="bi bi-envelope-fill"></i>
         <span>Enquiries</span>
-        <i class="bi bi-chevron-down chevron"></i>
-    </button>
-    <div class="collapse submenu {{ str_contains($route, 'enquiries') ? 'show' : '' }}" id="menuEnquiries">
-        <a href="{{ navLink('admin.enquiries.index') }}"
-            class="submenu-item {{ $route == 'admin.enquiries.index' ? 'active' : '' }}">All enquiries</a>
-        <a href="{{ navLink('admin.enquiries.products') }}"
-            class="submenu-item {{ $route == 'admin.enquiries.products' ? 'active' : '' }}">Product enquiries</a>
-        <a href="{{ navLink('admin.enquiries.services') }}"
-            class="submenu-item {{ $route == 'admin.enquiries.services' ? 'active' : '' }}">Service enquiries</a>
-        <a href="{{ navLink('admin.enquiries.open') }}"
-            class="submenu-item {{ $route == 'admin.enquiries.open' ? 'active' : '' }}">Open</a>
-        <a href="{{ navLink('admin.enquiries.closed') }}"
-            class="submenu-item {{ $route == 'admin.enquiries.closed' ? 'active' : '' }}">Closed</a>
-    </div>
+    </a>
 
     <div class="menu-title">LISTINGS</div>
 
-    {{-- PRODUCTS --}}
-    <button class="menu-item menu-parent {{ str_contains($route, 'products') ? 'active' : '' }}"
-        data-bs-toggle="collapse" data-bs-target="#menuProducts"
-        aria-expanded="{{ str_contains($route, 'products') ? 'true' : 'false' }}">
+    <a href="{{ navLink('admin.listings.products.index') }}" title="Products"
+        class="menu-item {{ str_contains($route, 'products') ? 'active' : '' }}">
         <i class="bi bi-box-seam"></i>
         <span>Products</span>
-        <i class="bi bi-chevron-down chevron"></i>
-    </button>
-    <div class="collapse submenu {{ str_contains($route, 'products') ? 'show' : '' }}" id="menuProducts">
-        <a href="{{ navLink('admin.products.pending') }}"
-            class="submenu-item {{ $route == 'admin.products.pending' ? 'active' : '' }}">Pending</a>
-        <a href="{{ navLink('admin.products.approved') }}"
-            class="submenu-item {{ $route == 'admin.products.approved' ? 'active' : '' }}">Approved</a>
-        <a href="{{ navLink('admin.products.rejected') }}"
-            class="submenu-item {{ $route == 'admin.products.rejected' ? 'active' : '' }}">Rejected</a>
-    </div>
+    </a>
 
-    {{-- SERVICES --}}
-    <button class="menu-item menu-parent {{ str_contains($route, 'services') ? 'active' : '' }}"
-        data-bs-toggle="collapse" data-bs-target="#menuServices"
-        aria-expanded="{{ str_contains($route, 'services') ? 'true' : 'false' }}">
+    <a href="{{ navLink('admin.listings.services.index') }}" title="Services"
+        class="menu-item {{ str_contains($route, 'services') ? 'active' : '' }}">
         <i class="bi bi-tools"></i>
         <span>Services</span>
-        <i class="bi bi-chevron-down chevron"></i>
-    </button>
-    <div class="collapse submenu {{ str_contains($route, 'services') ? 'show' : '' }}" id="menuServices">
-        <a href="{{ navLink('admin.services.pending') }}"
-            class="submenu-item {{ $route == 'admin.services.pending' ? 'active' : '' }}">Pending</a>
-        <a href="{{ navLink('admin.services.approved') }}"
-            class="submenu-item {{ $route == 'admin.services.approved' ? 'active' : '' }}">Approved</a>
-        <a href="{{ navLink('admin.services.rejected') }}"
-            class="submenu-item {{ $route == 'admin.services.rejected' ? 'active' : '' }}">Rejected</a>
-    </div>
+    </a>
 
-    {{-- CATEGORIES --}}
-    <button class="menu-item menu-parent {{ str_contains($route, 'categories') ? 'active' : '' }}"
-        data-bs-toggle="collapse" data-bs-target="#menuCategories"
-        aria-expanded="{{ str_contains($route, 'categories') ? 'true' : 'false' }}">
+    <a href="{{ navLink('admin.categories.index') }}" title="Categories"
+        class="menu-item {{ str_contains($route, 'categories') ? 'active' : '' }}">
         <i class="bi bi-grid"></i>
         <span>Categories</span>
-        <i class="bi bi-chevron-down chevron"></i>
-    </button>
-    <div class="collapse submenu {{ str_contains($route, 'categories') ? 'show' : '' }}" id="menuCategories">
-        <a href="{{ navLink('admin.categories.index') }}"
-            class="submenu-item {{ $route == 'admin.categories.index' ? 'active' : '' }}">All categories</a>
-        <a href="{{ navLink('admin.categories.active') }}"
-            class="submenu-item {{ $route == 'admin.categories.active' ? 'active' : '' }}">Active</a>
-        <a href="{{ navLink('admin.categories.inactive') }}"
-            class="submenu-item {{ $route == 'admin.categories.inactive' ? 'active' : '' }}">Inactive</a>
-        <a href="{{ navLink('admin.categories.create') }}"
-            class="submenu-item {{ $route == 'admin.categories.create' ? 'active' : '' }}">+ Add category</a>
-    </div>
+    </a>
 
     <div class="menu-title">SYSTEM</div>
 
-    <a href="{{ navLink('admin.settings') }}"
+    {{-- <a href="{{ navLink('admin.settings') }}" title="Settings"
         class="menu-item {{ str_contains($route, 'settings') ? 'active' : '' }}">
         <i class="bi bi-gear-fill"></i>
         <span>Settings</span>
-    </a>
+    </a> --}}
 
     <form action="{{ route('admin.logout') }}" method="POST">
         @csrf
-        <button class="menu-item logout-btn">
+        <button class="menu-item logout-btn" title="Logout">
             <i class="bi bi-box-arrow-right"></i>
             <span>Logout</span>
         </button>
@@ -166,33 +96,57 @@
 <style>
     .sidebar {
         width: 270px;
-        min-height: 100vh;
-        background: #0f172a;
+        height: 100vh;
+        background: #0D3B7A;
         display: flex;
         flex-direction: column;
         padding: 25px 18px;
-        position: sticky;
+        position: fixed;
         top: 0;
+        left: 0;
         overflow-y: auto;
+        overflow-x: hidden;
+        flex-shrink: 0;
+        z-index: 1000;
+        transition: width .25s ease;
+    }
+
+    .sidebar-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 35px;
     }
 
     .brand {
         display: flex;
         align-items: center;
         gap: 15px;
-        margin-bottom: 35px;
+        min-width: 0;
     }
 
     .brand-icon {
         width: 50px;
         height: 50px;
+        flex-shrink: 0;
         border-radius: 14px;
-        background: #2563eb;
+        background: #ffffff;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 22px;
-        color: white;
+        overflow: hidden;
+    }
+
+    .brand-icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 6px;
+    }
+
+    .brand-text {
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .brand h4 {
@@ -206,12 +160,31 @@
         color: #94a3b8;
     }
 
+    .sidebar-toggle {
+        background: none;
+        border: none;
+        color: #94a3b8;
+        font-size: 20px;
+        cursor: pointer;
+        padding: 6px 8px;
+        border-radius: 8px;
+        flex-shrink: 0;
+        transition: .2s;
+    }
+
+    .sidebar-toggle:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+    }
+
     .menu-title {
         font-size: 11px;
         font-weight: 700;
         letter-spacing: 1px;
         color: #64748b;
         margin: 18px 0 10px;
+        white-space: nowrap;
+        overflow: hidden;
     }
 
     .menu-item {
@@ -230,26 +203,35 @@
         text-align: left;
         font-size: inherit;
         cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .menu-item span {
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .menu-item:hover {
-        background: #1e293b;
+        background: rgba(255, 255, 255, 0.08);
         color: white;
     }
 
     .menu-item.active {
-        background: #2563eb;
+        background: #F7941E;
         color: white;
     }
 
-    .menu-item i {
+    .menu-item i:not(.chevron) {
         font-size: 18px;
+        flex-shrink: 0;
     }
 
     .menu-parent .chevron {
         margin-left: auto;
         font-size: 12px;
         transition: transform .2s;
+        flex-shrink: 0;
     }
 
     .menu-parent[aria-expanded="true"] .chevron {
@@ -270,18 +252,19 @@
         text-decoration: none;
         font-size: 13.5px;
         margin-bottom: 2px;
-        border-left: 2px solid #1e293b;
+        border-left: 2px solid rgba(255, 255, 255, 0.08);
+        white-space: nowrap;
     }
 
     .submenu-item:hover {
-        background: #1e293b;
+        background: rgba(255, 255, 255, 0.08);
         color: white;
     }
 
     .submenu-item.active {
         color: white;
         border-left: 2px solid #2563eb;
-        background: #1e293b;
+        background: rgba(255, 255, 255, 0.08);
         font-weight: 600;
     }
 
@@ -289,4 +272,54 @@
         margin-top: 15px;
         cursor: pointer;
     }
+
+    /* ---------- Collapsed (icon-only) state ---------- */
+
+    .sidebar.collapsed {
+        width: 84px;
+        padding: 25px 14px;
+    }
+
+    .sidebar.collapsed .sidebar-top {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .sidebar.collapsed .brand-text,
+    .sidebar.collapsed .menu-title,
+    .sidebar.collapsed .menu-item span,
+    .sidebar.collapsed .chevron {
+        display: none;
+    }
+
+    .sidebar.collapsed .menu-item {
+        justify-content: center;
+        padding: 12px;
+    }
+
+    .sidebar.collapsed .submenu {
+        display: none !important;
+    }
 </style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sidebar = document.getElementById('adminSidebar');
+        const toggleBtn = document.getElementById('sidebarToggle');
+        const mainContent = document.querySelector('.main-wrapper');
+
+        if (!sidebar || !toggleBtn) return;
+
+        // Restore saved state on load
+        if (localStorage.getItem('sidebarCollapsed') === 'true') {
+            sidebar.classList.add('collapsed');
+            mainContent?.classList.add('sidebar-collapsed');
+        }
+
+        toggleBtn.addEventListener('click', function() {
+            sidebar.classList.toggle('collapsed');
+            mainContent?.classList.toggle('sidebar-collapsed');
+            localStorage.setItem('sidebarCollapsed', sidebar.classList.contains('collapsed'));
+        });
+    });
+</script>
