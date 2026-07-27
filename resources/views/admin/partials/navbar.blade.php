@@ -44,7 +44,7 @@
 
             <div class="dropdown">
 
-                <button class="btn btn-light dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
+                <div class="d-flex align-items-center rounded-2xl">
 
                     <div class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center me-2"
                         style="width:38px;height:38px;">
@@ -69,7 +69,7 @@
 
                     </div>
 
-                </button>
+                </div>
 
                 <ul class="dropdown-menu dropdown-menu-end shadow border-0">
 

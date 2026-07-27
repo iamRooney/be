@@ -11,14 +11,16 @@
                 </h5>
 
                 <small class="text-muted">
-                    Showing 10 of 8,240 services
+                    Showing {{ $services->count() }} of {{ $services->total() }} services
                 </small>
 
             </div>
 
-            <button class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('admin.listings.services.index') }}" class="btn btn-outline-secondary btn-sm">
+
                 <i class="bi bi-arrow-clockwise"></i>
-            </button>
+
+            </a>
 
         </div>
 
@@ -42,13 +44,11 @@
 
                     <th>Category</th>
 
-                    <th>Coverage</th>
-
-                    <th>Experience</th>
-
                     <th>Status</th>
 
-                    <th width="80">Actions</th>
+                    <th>Featured</th>
+
+                    <th width="90">Actions</th>
 
                 </tr>
 
@@ -56,21 +56,7 @@
 
             <tbody>
 
-                @php
-
-                    $services = [
-                        ['Website Development', 'ABC Technologies', 'IT Services', 'India', '8 Years', 'Pending'],
-
-                        ['Digital Marketing', 'Growth Agency', 'Marketing', 'Global', '5 Years', 'Approved'],
-
-                        ['Electrical Installation', 'Volt Solutions', 'Engineering', 'UAE', '10 Years', 'Rejected'],
-
-                        ['CNC Cutting', 'Prime Industries', 'Manufacturing', 'Kerala', '12 Years', 'Approved'],
-                    ];
-
-                @endphp
-
-                @foreach ($services as $service)
+                @forelse($services as $service)
                     <tr>
 
                         <td>
@@ -81,16 +67,21 @@
 
                             <div class="d-flex align-items-center">
 
-                                <img src="https://placehold.co/60x60" class="rounded me-3">
+                                <img src="{{ $service->image ? asset('storage/' . $service->image) : 'https://placehold.co/60x60?text=No+Image' }}"
+                                    class="rounded me-3" style="width:60px;height:60px;object-fit:cover;">
 
                                 <div>
 
                                     <div class="fw-semibold">
-                                        {{ $service[0] }}
+
+                                        {{ $service->name }}
+
                                     </div>
 
                                     <small class="text-muted">
-                                        SRV-{{ rand(1000, 9999) }}
+
+                                        #{{ $service->id }}
+
                                     </small>
 
                                 </div>
@@ -99,27 +90,62 @@
 
                         </td>
 
-                        <td>{{ $service[1] }}</td>
+                        <td>
 
-                        <td>{{ $service[2] }}</td>
+                            {{ $service->company->name ?? '-' }}
 
-                        <td>{{ $service[3] }}</td>
-
-                        <td>{{ $service[4] }}</td>
+                        </td>
 
                         <td>
 
-                            @if ($service[5] == 'Approved')
-                                <span class="badge bg-success">
-                                    Approved
-                                </span>
-                            @elseif($service[5] == 'Pending')
-                                <span class="badge bg-warning text-dark">
-                                    Pending
+                            {{ $service->category->name ?? '-' }}
+
+                        </td>
+
+                        <td>
+
+                            @switch($service->status)
+                                @case('approved')
+                                    <span class="badge bg-success">
+                                        Approved
+                                    </span>
+                                @break
+
+                                @case('pending')
+                                    <span class="badge bg-warning text-dark">
+                                        Pending
+                                    </span>
+                                @break
+
+                                @case('rejected')
+                                    <span class="badge bg-danger">
+                                        Rejected
+                                    </span>
+                                @break
+
+                                @default
+                                    <span class="badge bg-secondary">
+
+                                        {{ ucfirst($service->status) }}
+
+                                    </span>
+                            @endswitch
+
+                        </td>
+
+                        <td>
+
+                            @if ($service->featured)
+                                <span class="badge bg-primary">
+
+                                    Featured
+
                                 </span>
                             @else
-                                <span class="badge bg-danger">
-                                    Rejected
+                                <span class="badge bg-light text-dark border">
+
+                                    Normal
+
                                 </span>
                             @endif
 
@@ -139,29 +165,12 @@
 
                                     <li>
 
-                                        <a class="dropdown-item" href="{{ route('admin.listings.services.show', 1) }}">
+                                        <a class="dropdown-item"
+                                            href="{{ route('admin.listings.services.show', $service) }}">
+
+                                            <i class="bi bi-eye me-2"></i>
 
                                             View
-
-                                        </a>
-
-                                    </li>
-
-                                    <li>
-
-                                        <a class="dropdown-item text-success">
-
-                                            Approve
-
-                                        </a>
-
-                                    </li>
-
-                                    <li>
-
-                                        <a class="dropdown-item text-danger">
-
-                                            Reject
 
                                         </a>
 
@@ -174,12 +183,44 @@
                         </td>
 
                     </tr>
-                @endforeach
 
-            </tbody>
+                    @empty
 
-        </table>
+                        <tr>
+
+                            <td colspan="7" class="text-center py-5">
+
+                                <i class="bi bi-briefcase fs-1 text-muted"></i>
+
+                                <h5 class="mt-3">
+
+                                    No Services Found
+
+                                </h5>
+
+                                <p class="text-muted mb-0">
+
+                                    No services match the selected filters.
+
+                                </p>
+
+                            </td>
+
+                        </tr>
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        @if ($services->hasPages())
+            <div class="card-footer bg-white">
+
+                {{ $services->links() }}
+
+            </div>
+        @endif
 
     </div>
-
-</div>

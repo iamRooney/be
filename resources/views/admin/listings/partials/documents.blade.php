@@ -2,7 +2,7 @@
 
     <div class="card-header bg-white">
 
-        <h5 class="fw-bold">
+        <h5 class="fw-bold mb-0">
 
             Attachments
 
@@ -10,19 +10,78 @@
 
     </div>
 
-    <div class="list-group list-group-flush">
+    <div class="card-body">
 
-        <a href="#" class="list-group-item">
+        @php
+            $documents = [];
 
-            Product Brochure.pdf
+            if (!empty($product->brochure)) {
+                $documents[] = [
+                    'name' => 'Product Brochure',
+                    'url' => asset('storage/' . $product->brochure),
+                    'icon' => 'bi-file-earmark-pdf',
+                ];
+            }
 
-        </a>
+            if (!empty($product->datasheet)) {
+                $documents[] = [
+                    'name' => 'Datasheet',
+                    'url' => asset('storage/' . $product->datasheet),
+                    'icon' => 'bi-file-earmark-text',
+                ];
+            }
 
-        <a href="#" class="list-group-item">
+            if (!empty($product->warranty_document)) {
+                $documents[] = [
+                    'name' => 'Warranty Document',
+                    'url' => asset('storage/' . $product->warranty_document),
+                    'icon' => 'bi-file-earmark-check',
+                ];
+            }
+        @endphp
 
-            Warranty.pdf
+        @if (count($documents))
 
-        </a>
+            <div class="list-group list-group-flush">
+
+                @foreach ($documents as $document)
+                    <a href="{{ $document['url'] }}" target="_blank"
+                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <i class="bi {{ $document['icon'] }} me-2"></i>
+
+                            {{ $document['name'] }}
+
+                        </div>
+
+                        <i class="bi bi-box-arrow-up-right"></i>
+
+                    </a>
+                @endforeach
+
+            </div>
+        @else
+            <div class="text-center py-4">
+
+                <i class="bi bi-folder2-open fs-1 text-muted"></i>
+
+                <h6 class="mt-3 mb-1">
+
+                    No Attachments
+
+                </h6>
+
+                <p class="text-muted mb-0">
+
+                    The seller has not uploaded any supporting documents.
+
+                </p>
+
+            </div>
+
+        @endif
 
     </div>
 

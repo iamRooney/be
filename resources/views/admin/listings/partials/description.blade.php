@@ -2,7 +2,7 @@
 
     <div class="card-header bg-white">
 
-        <h5 class="fw-bold">
+        <h5 class="fw-bold mb-0">
 
             Description
 
@@ -12,12 +12,37 @@
 
     <div class="card-body">
 
-        <p class="mb-0">
+        @if (!empty($product->description))
+            <div class="text-muted" style="white-space: pre-line; line-height:1.8;">
 
-            Arduino UNO R4 is a powerful development board suitable for embedded systems,
-            IoT projects and industrial automation applications.
+                {{ $product->description }}
 
-        </p>
+            </div>
+        @elseif(!empty($product->short_description))
+            <div class="text-muted" style="white-space: pre-line; line-height:1.8;">
+
+                {{ $product->short_description }}
+
+            </div>
+        @else
+            <div class="text-center py-4">
+
+                <i class="bi bi-file-text fs-1 text-muted"></i>
+
+                <h6 class="mt-3 mb-1">
+
+                    No Description Available
+
+                </h6>
+
+                <p class="text-muted mb-0">
+
+                    The seller has not provided a product description.
+
+                </p>
+
+            </div>
+        @endif
 
     </div>
 

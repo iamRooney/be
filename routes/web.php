@@ -60,6 +60,21 @@ Route::prefix('admin')->group(function () {
 
             Route::resource('products', ProductController::class);
 
+            Route::patch(
+                'products/{product}/approve',
+                [ProductController::class, 'approve']
+            )->name('products.approve');
+
+            Route::patch(
+                'products/{product}/reject',
+                [ProductController::class, 'reject']
+            )->name('products.reject');
+
+            Route::patch(
+                'products/{product}/feature',
+                [ProductController::class, 'toggleFeatured']
+            )->name('products.feature');
+
             Route::resource('services', ServiceController::class);
         });
 

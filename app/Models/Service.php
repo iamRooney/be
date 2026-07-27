@@ -4,9 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Str;
 
-class Product extends Model
+class Service extends Model
 {
     use HasFactory;
 
@@ -20,43 +19,33 @@ class Product extends Model
 
         'slug',
 
+        'image',
+
         'short_description',
 
         'description',
 
-        'image',
+        'starting_price',
 
-        'gallery',
+        'service_area',
 
-        'price',
+        'experience',
 
-        'unit',
-
-        'status',
+        'availability',
 
         'featured',
 
-        'views'
+        'status',
 
     ];
 
     protected $casts = [
 
-        'gallery' => 'array',
+        'featured' => 'boolean',
 
-        'featured' => 'boolean'
+        'starting_price' => 'decimal:2',
 
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($product) {
-
-            $product->slug = Str::slug($product->name);
-        });
-    }
 
     public function company()
     {

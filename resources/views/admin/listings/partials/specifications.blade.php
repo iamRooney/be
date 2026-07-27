@@ -2,7 +2,7 @@
 
     <div class="card-header bg-white">
 
-        <h5 class="fw-bold">
+        <h5 class="fw-bold mb-0">
 
             Specifications
 
@@ -12,33 +12,50 @@
 
     <div class="card-body">
 
-        <ul class="list-group list-group-flush">
+        <table class="table table-borderless table-sm mb-0">
 
-            <li class="list-group-item">
+            <tbody>
 
-                Microcontroller : Renesas RA4M1
+                <tr>
+                    <th width="35%">Category</th>
+                    <td>{{ $product->category->name ?? 'N/A' }}</td>
+                </tr>
 
-            </li>
+                <tr>
+                    <th>Company</th>
+                    <td>{{ $product->company->name ?? 'N/A' }}</td>
+                </tr>
 
-            <li class="list-group-item">
+                <tr>
+                    <th>Price</th>
+                    <td>₹{{ number_format($product->price, 2) }}</td>
+                </tr>
 
-                Operating Voltage : 5V
+                <tr>
+                    <th>Minimum Order Qty</th>
+                    <td>{{ $product->moq ?? 'Not Specified' }}</td>
+                </tr>
 
-            </li>
+                <tr>
+                    <th>Featured Listing</th>
+                    <td>
+                        {{ $product->featured ? 'Yes' : 'No' }}
+                    </td>
+                </tr>
 
-            <li class="list-group-item">
+                <tr>
+                    <th>Status</th>
+                    <td>{{ ucfirst($product->status) }}</td>
+                </tr>
 
-                USB Type-C
+                <tr>
+                    <th>Created On</th>
+                    <td>{{ $product->created_at?->format('d M Y') }}</td>
+                </tr>
 
-            </li>
+            </tbody>
 
-            <li class="list-group-item">
-
-                Wi-Fi : Optional
-
-            </li>
-
-        </ul>
+        </table>
 
     </div>
 

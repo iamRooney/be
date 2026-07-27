@@ -1,37 +1,23 @@
 <div class="card border-0 shadow-sm rounded-4">
 
     <div class="card-header bg-white border-0">
-
         <div class="d-flex justify-content-between align-items-center">
 
             <div>
-
-                <h5 class="fw-bold mb-1">
-
-                    Products
-
-                </h5>
-
+                <h5 class="fw-bold mb-1">Products</h5>
                 <small class="text-muted">
-
-                    Showing 10 of 15,240 products
-
+                    Showing {{ $products->count() }} of {{ $products->total() }} products
                 </small>
-
             </div>
 
-            <div>
+            <button class="btn btn-outline-secondary btn-sm rounded-pill" onclick="window.location.reload()">
 
-                <button class="btn btn-outline-secondary btn-sm">
+                <i class="bi bi-arrow-clockwise me-1"></i>
+                Refresh
 
-                    <i class="bi bi-arrow-clockwise"></i>
-
-                </button>
-
-            </div>
+            </button>
 
         </div>
-
     </div>
 
     <div class="table-responsive">
@@ -42,25 +28,14 @@
 
                 <tr>
 
-                    <th width="40">
-
-                        <input type="checkbox" class="form-check-input">
-
-                    </th>
-
+                    <th width="60">#</th>
                     <th>Product</th>
-
                     <th>Company</th>
-
                     <th>Category</th>
-
-                    <th>MOQ</th>
-
-                    <th>Views</th>
-
+                    <th>Price</th>
+                    <th>Featured</th>
                     <th>Status</th>
-
-                    <th width="80">Actions</th>
+                    <th width="260">Actions</th>
 
                 </tr>
 
@@ -68,46 +43,31 @@
 
             <tbody>
 
-                @php
-
-                    $products = [
-                        ['Arduino UNO', 'ABC Electronics', 'Electronics', '50', '1240', 'Pending'],
-
-                        ['Industrial Pump', 'Prime Industries', 'Machinery', '10', '842', 'Approved'],
-
-                        ['Steel Rod', 'Global Steel', 'Metal', '100', '2145', 'Rejected'],
-
-                        ['PVC Pipe', 'Green Build', 'Construction', '200', '945', 'Approved'],
-                    ];
-
-                @endphp
-
-                @foreach ($products as $product)
+                @forelse($products as $product)
                     <tr>
 
                         <td>
-
-                            <input type="checkbox" class="form-check-input">
-
+                            {{ $products->firstItem() + $loop->index }}
                         </td>
 
                         <td>
 
                             <div class="d-flex align-items-center">
 
-                                <img src="https://placehold.co/60x60" class="rounded me-3">
+                                <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/60x60' }}"
+                                    width="60" height="60" class="rounded me-3" style="object-fit:cover">
 
                                 <div>
 
                                     <div class="fw-semibold">
 
-                                        {{ $product[0] }}
+                                        {{ $product->name }}
 
                                     </div>
 
                                     <small class="text-muted">
 
-                                        SKU-{{ rand(1000, 9999) }}
+                                        {{ $product->slug }}
 
                                     </small>
 
@@ -117,81 +77,200 @@
 
                         </td>
 
-                        <td>{{ $product[1] }}</td>
+                        <td>
 
-                        <td>{{ $product[2] }}</td>
+                            {{ $product->company->name ?? '-' }}
 
-                        <td>{{ $product[3] }}</td>
-
-                        <td>{{ number_format($product[4]) }}</td>
+                        </td>
 
                         <td>
 
-                            @if ($product[5] == 'Approved')
-                                <span class="badge bg-success">Approved</span>
-                            @elseif($product[5] == 'Pending')
-                                <span class="badge bg-warning text-dark">Pending</span>
+                            {{ $product->category->name ?? '-' }}
+
+                        </td>
+
+                        <td>
+
+                            ₹{{ number_format($product->price, 2) }}
+
+                        </td>
+
+                        <td>
+
+                            @if ($product->featured)
+                                <span class="badge bg-primary">
+
+                                    Featured
+
+                                </span>
                             @else
-                                <span class="badge bg-danger">Rejected</span>
+                                <span class="badge bg-secondary">
+
+                                    No
+
+                                </span>
                             @endif
 
                         </td>
 
                         <td>
 
-                            <div class="dropdown">
+                            @switch($product->status)
+                                @case('approved')
+                                    <span class="badge bg-success">
 
-                                <button class="btn btn-light btn-sm" data-bs-toggle="dropdown">
+                                        Approved
 
-                                    <i class="bi bi-three-dots"></i>
+                                    </span>
+                                @break
 
-                                </button>
+                                @case('pending')
+                                    <span class="badge bg-warning text-dark">
 
-                                <ul class="dropdown-menu dropdown-menu-end">
+                                        Pending
 
-                                    <li>
+                                    </span>
+                                @break
 
-                                        <a class="dropdown-item" href="{{ route('admin.listings.products.show', 1) }}">
+                                @case('rejected')
+                                    <span class="badge bg-danger">
 
-                                            View
+                                        Rejected
 
-                                        </a>
+                                    </span>
+                                @break
 
-                                    </li>
+                                @default
+                                    <span class="badge bg-secondary">
 
-                                    <li>
+                                        {{ ucfirst($product->status) }}
 
-                                        <a class="dropdown-item text-success">
+                                    </span>
+                            @endswitch
 
-                                            Approve
+                        </td>
 
-                                        </a>
+                        <td>
 
-                                    </li>
+                            <div class="btn-group" role="group">
 
-                                    <li>
+                                {{-- View --}}
+                                <a href="{{ route('admin.listings.products.show', $product) }}"
+                                    class="btn btn-sm btn-info" title="View">
 
-                                        <a class="dropdown-item text-danger">
+                                    <i class="bi bi-eye"></i>
 
-                                            Reject
+                                </a>
 
-                                        </a>
+                                {{-- Approve --}}
+                                @if ($product->status != 'approved')
+                                    <form action="{{ route('admin.listings.products.approve', $product) }}"
+                                        method="POST" class="d-inline">
 
-                                    </li>
+                                        @csrf
+                                        @method('PATCH')
 
-                                </ul>
+                                        <button class="btn btn-sm btn-success" title="Approve">
+
+                                            <i class="bi bi-check-lg"></i>
+
+                                        </button>
+
+                                    </form>
+                                @endif
+
+                                {{-- Reject --}}
+                                @if ($product->status != 'rejected')
+                                    <form action="{{ route('admin.listings.products.reject', $product) }}"
+                                        method="POST" class="d-inline">
+
+                                        @csrf
+                                        @method('PATCH')
+
+                                        <button class="btn btn-sm btn-warning" title="Reject">
+
+                                            <i class="bi bi-x-lg"></i>
+
+                                        </button>
+
+                                    </form>
+                                @endif
+
+                                {{-- Feature --}}
+                                <form action="{{ route('admin.listings.products.feature', $product) }}" method="POST"
+                                    class="d-inline">
+
+                                    @csrf
+                                    @method('PATCH')
+
+                                    <button
+                                        class="btn btn-sm {{ $product->featured ? 'btn-primary' : 'btn-outline-primary' }}"
+                                        title="Toggle Featured">
+
+                                        <i class="bi bi-star{{ $product->featured ? '-fill' : '' }}"></i>
+
+                                    </button>
+
+                                </form>
+
+                                {{-- Delete --}}
+                                <form action="{{ route('admin.listings.products.destroy', $product) }}" method="POST"
+                                    class="d-inline" onsubmit="return confirm('Delete this product?')">
+
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button class="btn btn-sm btn-danger" title="Delete">
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </button>
+
+                                </form>
 
                             </div>
 
                         </td>
 
                     </tr>
-                @endforeach
 
-            </tbody>
+                    @empty
 
-        </table>
+                        <tr>
+
+                            <td colspan="8" class="text-center py-5">
+
+                                <i class="bi bi-box display-5 text-muted"></i>
+
+                                <h5 class="mt-3">
+
+                                    No Products Found
+
+                                </h5>
+
+                                <p class="text-muted mb-0">
+
+                                    There are currently no products matching your filters.
+
+                                </p>
+
+                            </td>
+
+                        </tr>
+                    @endforelse
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        @if ($products->hasPages())
+            <div class="card-footer bg-white">
+
+                {{ $products->withQueryString()->links() }}
+
+            </div>
+        @endif
 
     </div>
-
-</div>

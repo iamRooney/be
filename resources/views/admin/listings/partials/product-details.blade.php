@@ -3,71 +3,116 @@
     <div class="card-header bg-white">
 
         <h5 class="fw-bold mb-0">
-
             Product Information
-
         </h5>
 
     </div>
 
     <div class="card-body">
 
-        <table class="table mb-0">
+        <table class="table table-borderless align-middle mb-0">
 
             <tr>
-
                 <th width="35%">Product Name</th>
-
-                <td>Arduino UNO R4</td>
-
+                <td>{{ $product->name }}</td>
             </tr>
 
             <tr>
+                <th>Slug</th>
+                <td>
+                    <code>{{ $product->slug }}</code>
+                </td>
+            </tr>
 
+            <tr>
+                <th>Company</th>
+                <td>
+                    {{ $product->company->name ?? 'N/A' }}
+                </td>
+            </tr>
+
+            <tr>
                 <th>Category</th>
-
-                <td>Electronics</td>
-
+                <td>
+                    {{ $product->category->name ?? 'N/A' }}
+                </td>
             </tr>
 
             <tr>
-
-                <th>Brand</th>
-
-                <td>Arduino</td>
-
+                <th>Price</th>
+                <td>
+                    ₹{{ number_format($product->price, 2) }}
+                </td>
             </tr>
 
             <tr>
-
-                <th>Model</th>
-
-                <td>UNO R4</td>
-
-            </tr>
-
-            <tr>
-
                 <th>MOQ</th>
-
-                <td>50 Units</td>
-
+                <td>
+                    {{ $product->moq ?? 'Not Specified' }}
+                </td>
             </tr>
 
             <tr>
-
-                <th>Status</th>
-
+                <th>Featured</th>
                 <td>
 
-                    <span class="badge bg-warning">
-
-                        Pending Review
-
-                    </span>
+                    @if ($product->featured)
+                        <span class="badge bg-primary">
+                            Featured
+                        </span>
+                    @else
+                        <span class="badge bg-secondary">
+                            No
+                        </span>
+                    @endif
 
                 </td>
+            </tr>
 
+            <tr>
+                <th>Status</th>
+                <td>
+
+                    @switch($product->status)
+                        @case('approved')
+                            <span class="badge bg-success">
+                                Approved
+                            </span>
+                        @break
+
+                        @case('pending')
+                            <span class="badge bg-warning text-dark">
+                                Pending
+                            </span>
+                        @break
+
+                        @case('rejected')
+                            <span class="badge bg-danger">
+                                Rejected
+                            </span>
+                        @break
+
+                        @default
+                            <span class="badge bg-secondary">
+                                {{ ucfirst($product->status) }}
+                            </span>
+                    @endswitch
+
+                </td>
+            </tr>
+
+            <tr>
+                <th>Created</th>
+                <td>
+                    {{ $product->created_at?->format('d M Y, h:i A') }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Last Updated</th>
+                <td>
+                    {{ $product->updated_at?->format('d M Y, h:i A') }}
+                </td>
             </tr>
 
         </table>

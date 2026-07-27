@@ -20,33 +20,101 @@
 
                 <h3 class="fw-bold mt-3 mb-1">
 
-                    Arduino UNO R4
+                    {{ $product->name }}
 
                 </h3>
 
-                <p class="text-muted">
+                <p class="text-muted mb-2">
 
-                    Submitted by ABC Electronics
+                    Submitted by
+
+                    <strong>
+
+                        {{ $product->company->name ?? 'Unknown Company' }}
+
+                    </strong>
 
                 </p>
+
+                <div class="d-flex gap-2">
+
+                    <span class="badge bg-secondary">
+
+                        {{ $product->category->name ?? 'No Category' }}
+
+                    </span>
+
+                    @if ($product->featured)
+                        <span class="badge bg-primary">
+
+                            Featured
+
+                        </span>
+                    @endif
+
+                    @switch($product->status)
+                        @case('approved')
+                            <span class="badge bg-success">
+
+                                Approved
+
+                            </span>
+                        @break
+
+                        @case('pending')
+                            <span class="badge bg-warning text-dark">
+
+                                Pending
+
+                            </span>
+                        @break
+
+                        @case('rejected')
+                            <span class="badge bg-danger">
+
+                                Rejected
+
+                            </span>
+                        @break
+                    @endswitch
+
+                </div>
 
             </div>
 
             <div class="d-flex gap-2">
 
-                <button class="btn btn-success">
+                @if ($product->status != 'approved')
+                    <form action="{{ route('admin.listings.products.approve', $product) }}" method="POST">
 
-                    <i class="bi bi-check-circle me-2"></i>
+                        @csrf
+                        @method('PATCH')
 
-                    Approve
+                        <button class="btn btn-success">
 
-                </button>
+                            <i class="bi bi-check-circle me-2"></i>
 
-                <button class="btn btn-danger">
+                            Approve
 
-                    Reject
+                        </button>
 
-                </button>
+                    </form>
+                @endif
+
+                @if ($product->status != 'rejected')
+                    <form action="{{ route('admin.listings.products.reject', $product) }}" method="POST">
+
+                        @csrf
+                        @method('PATCH')
+
+                        <button class="btn btn-danger">
+
+                            Reject
+
+                        </button>
+
+                    </form>
+                @endif
 
             </div>
 

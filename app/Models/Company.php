@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product;
 
 class Company extends Model
 {
@@ -56,5 +57,10 @@ class Company extends Model
     public function city()
     {
         return $this->belongsTo(City::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }
