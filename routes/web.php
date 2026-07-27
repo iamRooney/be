@@ -76,6 +76,21 @@ Route::prefix('admin')->group(function () {
             )->name('products.feature');
 
             Route::resource('services', ServiceController::class);
+
+            Route::patch(
+                'services/{service}/approve',
+                [ServiceController::class, 'approve']
+            )->name('services.approve');
+
+            Route::patch(
+                'services/{service}/reject',
+                [ServiceController::class, 'reject']
+            )->name('services.reject');
+
+            Route::patch(
+                'services/{service}/feature',
+                [ServiceController::class, 'toggleFeatured']
+            )->name('services.feature');
         });
 
         // Toggle Category Status

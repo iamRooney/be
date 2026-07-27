@@ -10,22 +10,29 @@
 
     <div class="card-body">
 
-        <p class="text-muted mb-3">
+        @if ($service->description)
+            <div class="text-muted" style="white-space: pre-line; line-height:1.8;">
+                {{ $service->description }}
+            </div>
+        @elseif($service->short_description)
+            <div class="text-muted" style="white-space: pre-line; line-height:1.8;">
+                {{ $service->short_description }}
+            </div>
+        @else
+            <div class="text-center py-4">
 
-            We provide complete website development solutions including
-            UI/UX design, frontend development, backend development,
-            API integration, hosting deployment, SEO optimization,
-            maintenance and technical support.
+                <i class="bi bi-file-text fs-1 text-muted"></i>
 
-        </p>
+                <h6 class="mt-3 mb-1">
+                    No Description Available
+                </h6>
 
-        <p class="text-muted mb-0">
+                <p class="text-muted mb-0">
+                    The seller has not provided a service description.
+                </p>
 
-            Our team specializes in Laravel, React, Next.js,
-            Flutter and cloud deployment for startups,
-            SMEs and enterprise businesses.
-
-        </p>
+            </div>
+        @endif
 
     </div>
 

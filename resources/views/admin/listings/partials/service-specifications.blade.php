@@ -10,90 +10,60 @@
 
     <div class="card-body">
 
-        <div class="row g-4">
+        <table class="table table-borderless table-sm mb-0">
 
-            <div class="col-md-6">
+            <tbody>
 
-                <div class="border rounded-3 p-3 h-100">
+                <tr>
+                    <th width="35%">Category</th>
+                    <td>{{ $service->category->name ?? 'N/A' }}</td>
+                </tr>
 
-                    <h6 class="fw-semibold mb-3">
+                <tr>
+                    <th>Company</th>
+                    <td>{{ $service->company->name ?? 'N/A' }}</td>
+                </tr>
 
-                        Coverage Area
+                <tr>
+                    <th>Starting Price</th>
+                    <td>
+                        {{ $service->starting_price ? '₹' . number_format($service->starting_price, 2) : 'Not Specified' }}
+                    </td>
+                </tr>
 
-                    </h6>
+                <tr>
+                    <th>Service Area</th>
+                    <td>{{ $service->service_area ?? 'Not Specified' }}</td>
+                </tr>
 
-                    <ul class="list-unstyled mb-0">
+                <tr>
+                    <th>Experience</th>
+                    <td>{{ $service->experience ?? 'Not Specified' }}</td>
+                </tr>
 
-                        <li class="mb-2">
-                            <i class="bi bi-check-circle-fill text-success me-2"></i>
-                            Kerala
-                        </li>
+                <tr>
+                    <th>Availability</th>
+                    <td>{{ $service->availability ?? 'Not Specified' }}</td>
+                </tr>
 
-                        <li class="mb-2">
-                            <i class="bi bi-check-circle-fill text-success me-2"></i>
-                            Tamil Nadu
-                        </li>
+                <tr>
+                    <th>Featured</th>
+                    <td>{{ $service->featured ? 'Yes' : 'No' }}</td>
+                </tr>
 
-                        <li class="mb-2">
-                            <i class="bi bi-check-circle-fill text-success me-2"></i>
-                            Karnataka
-                        </li>
+                <tr>
+                    <th>Status</th>
+                    <td>{{ ucfirst($service->status) }}</td>
+                </tr>
 
-                        <li>
-                            <i class="bi bi-check-circle-fill text-success me-2"></i>
-                            Pan India
-                        </li>
+                <tr>
+                    <th>Created On</th>
+                    <td>{{ $service->created_at?->format('d M Y') }}</td>
+                </tr>
 
-                    </ul>
+            </tbody>
 
-                </div>
-
-            </div>
-
-            <div class="col-md-6">
-
-                <div class="border rounded-3 p-3 h-100">
-
-                    <h6 class="fw-semibold mb-3">
-
-                        Service Features
-
-                    </h6>
-
-                    <ul class="list-unstyled mb-0">
-
-                        <li class="mb-2">
-                            <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                            Responsive Design
-                        </li>
-
-                        <li class="mb-2">
-                            <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                            SEO Friendly
-                        </li>
-
-                        <li class="mb-2">
-                            <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                            API Integration
-                        </li>
-
-                        <li class="mb-2">
-                            <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                            Admin Dashboard
-                        </li>
-
-                        <li>
-                            <i class="bi bi-check-circle-fill text-primary me-2"></i>
-                            6 Months Support
-                        </li>
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-        </div>
+        </table>
 
     </div>
 

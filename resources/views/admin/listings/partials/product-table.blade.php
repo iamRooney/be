@@ -152,80 +152,57 @@
 
                         <td>
 
-                            <div class="btn-group" role="group">
+                            <div class="d-flex align-items-center gap-1" role="group">
 
                                 {{-- View --}}
                                 <a href="{{ route('admin.listings.products.show', $product) }}"
                                     class="btn btn-sm btn-info" title="View">
-
                                     <i class="bi bi-eye"></i>
-
                                 </a>
 
                                 {{-- Approve --}}
                                 @if ($product->status != 'approved')
                                     <form action="{{ route('admin.listings.products.approve', $product) }}"
-                                        method="POST" class="d-inline">
-
+                                        method="POST">
                                         @csrf
                                         @method('PATCH')
-
                                         <button class="btn btn-sm btn-success" title="Approve">
-
                                             <i class="bi bi-check-lg"></i>
-
                                         </button>
-
                                     </form>
                                 @endif
 
                                 {{-- Reject --}}
                                 @if ($product->status != 'rejected')
                                     <form action="{{ route('admin.listings.products.reject', $product) }}"
-                                        method="POST" class="d-inline">
-
+                                        method="POST">
                                         @csrf
                                         @method('PATCH')
-
                                         <button class="btn btn-sm btn-warning" title="Reject">
-
                                             <i class="bi bi-x-lg"></i>
-
                                         </button>
-
                                     </form>
                                 @endif
 
                                 {{-- Feature --}}
-                                <form action="{{ route('admin.listings.products.feature', $product) }}" method="POST"
-                                    class="d-inline">
-
+                                <form action="{{ route('admin.listings.products.feature', $product) }}" method="POST">
                                     @csrf
                                     @method('PATCH')
-
                                     <button
                                         class="btn btn-sm {{ $product->featured ? 'btn-primary' : 'btn-outline-primary' }}"
                                         title="Toggle Featured">
-
                                         <i class="bi bi-star{{ $product->featured ? '-fill' : '' }}"></i>
-
                                     </button>
-
                                 </form>
 
                                 {{-- Delete --}}
                                 <form action="{{ route('admin.listings.products.destroy', $product) }}" method="POST"
-                                    class="d-inline" onsubmit="return confirm('Delete this product?')">
-
+                                    onsubmit="return confirm('Delete this product?')">
                                     @csrf
                                     @method('DELETE')
-
                                     <button class="btn btn-sm btn-danger" title="Delete">
-
                                         <i class="bi bi-trash"></i>
-
                                     </button>
-
                                 </form>
 
                             </div>

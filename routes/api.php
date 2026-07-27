@@ -11,6 +11,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\ServiceController;
+use App\Http\Controllers\Api\EnquiryController;
 
 // Public APIs
 Route::apiResource('countries', CountryController::class);
@@ -29,3 +30,5 @@ Route::prefix('admin')->group(function () {
     Route::apiResource('products', ProductController::class);
     Route::apiResource('services', ServiceController::class);
 });
+
+Route::post('/enquiries', [EnquiryController::class, 'store']);

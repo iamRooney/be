@@ -1,9 +1,11 @@
 <div class="card border-0 shadow-sm rounded-4 mb-4">
 
     <div class="card-header bg-white">
+
         <h5 class="fw-bold mb-0">
             Service Information
         </h5>
+
     </div>
 
     <div class="card-body">
@@ -12,51 +14,91 @@
 
             <tr>
                 <th width="35%">Service Name</th>
-                <td>Website Development</td>
+                <td>{{ $service->name }}</td>
+            </tr>
+
+            <tr>
+                <th>Slug</th>
+                <td><code>{{ $service->slug }}</code></td>
+            </tr>
+
+            <tr>
+                <th>Company</th>
+                <td>{{ $service->company->name ?? 'N/A' }}</td>
             </tr>
 
             <tr>
                 <th>Category</th>
-                <td>IT Services</td>
-            </tr>
-
-            <tr>
-                <th>Sub Category</th>
-                <td>Web Design & Development</td>
-            </tr>
-
-            <tr>
-                <th>Experience</th>
-                <td>8 Years</td>
-            </tr>
-
-            <tr>
-                <th>Coverage</th>
-                <td>Pan India</td>
-            </tr>
-
-            <tr>
-                <th>Delivery Time</th>
-                <td>7 Days</td>
+                <td>{{ $service->category->name ?? 'N/A' }}</td>
             </tr>
 
             <tr>
                 <th>Starting Price</th>
-                <td>₹10,000</td>
+                <td>
+                    {{ $service->starting_price ? '₹' . number_format($service->starting_price, 2) : 'Not Specified' }}
+                </td>
+            </tr>
+
+            <tr>
+                <th>Service Area</th>
+                <td>{{ $service->service_area ?? 'Not Specified' }}</td>
+            </tr>
+
+            <tr>
+                <th>Experience</th>
+                <td>{{ $service->experience ?? 'Not Specified' }}</td>
             </tr>
 
             <tr>
                 <th>Availability</th>
-                <td>Monday - Saturday</td>
+                <td>{{ $service->availability ?? 'Not Specified' }}</td>
+            </tr>
+
+            <tr>
+                <th>Featured</th>
+                <td>
+                    @if ($service->featured)
+                        <span class="badge bg-primary">Featured</span>
+                    @else
+                        <span class="badge bg-secondary">No</span>
+                    @endif
+                </td>
             </tr>
 
             <tr>
                 <th>Status</th>
                 <td>
-                    <span class="badge bg-warning text-dark">
-                        Pending Review
-                    </span>
+
+                    @switch($service->status)
+                        @case('approved')
+                            <span class="badge bg-success">Approved</span>
+                        @break
+
+                        @case('pending')
+                            <span class="badge bg-warning text-dark">Pending</span>
+                        @break
+
+                        @case('rejected')
+                            <span class="badge bg-danger">Rejected</span>
+                        @break
+
+                        @default
+                            <span class="badge bg-secondary">
+                                {{ ucfirst($service->status) }}
+                            </span>
+                    @endswitch
+
                 </td>
+            </tr>
+
+            <tr>
+                <th>Created</th>
+                <td>{{ $service->created_at?->format('d M Y, h:i A') }}</td>
+            </tr>
+
+            <tr>
+                <th>Updated</th>
+                <td>{{ $service->updated_at?->format('d M Y, h:i A') }}</td>
             </tr>
 
         </table>
