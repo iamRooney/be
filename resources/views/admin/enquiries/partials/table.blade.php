@@ -4,18 +4,21 @@
 
         <div>
             <h5 class="fw-bold mb-1">All Enquiries</h5>
-            <small class="text-muted">Showing 10 of 842 enquiries</small>
+            <small class="text-muted">
+                Showing {{ $enquiries->count() }} of {{ $enquiries->total() }} enquiries
+            </small>
         </div>
 
         <div class="d-flex gap-2">
 
-            <button class="btn btn-outline-secondary btn-sm">
+            <button class="btn btn-outline-secondary btn-sm" onclick="window.location.reload()">
                 <i class="bi bi-arrow-clockwise"></i>
             </button>
 
-            <button class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('admin.enquiries.index', array_merge(request()->query(), ['export' => 1])) }}"
+                class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-download"></i>
-            </button>
+            </a>
 
         </div>
 
@@ -47,7 +50,7 @@
 
                     <th>Priority</th>
 
-                    <th width="80" class="text-center">Actions</th>
+                    <th width="140" class="text-center">Actions</th>
 
                 </tr>
 
@@ -55,102 +58,42 @@
 
             <tbody>
 
-                @php
-
-                    $enquiries = [
-                        [
-                            'id' => 'ENQ-1001',
-                            'buyer' => 'Rahul Nair',
-                            'seller' => 'ABC Electronics',
-                            'listing' => 'Arduino UNO',
-                            'type' => 'Product',
-                            'date' => '2 mins ago',
-                            'status' => 'Open',
-                            'priority' => 'High',
-                        ],
-
-                        [
-                            'id' => 'ENQ-1002',
-                            'buyer' => 'Anjali',
-                            'seller' => 'Prime Industries',
-                            'listing' => 'Industrial Pump',
-                            'type' => 'Product',
-                            'date' => '15 mins ago',
-                            'status' => 'Open',
-                            'priority' => 'Medium',
-                        ],
-
-                        [
-                            'id' => 'ENQ-1003',
-                            'buyer' => 'Arjun',
-                            'seller' => 'Tech Solutions',
-                            'listing' => 'Website Development',
-                            'type' => 'Service',
-                            'date' => 'Yesterday',
-                            'status' => 'Closed',
-                            'priority' => 'Low',
-                        ],
-
-                        [
-                            'id' => 'ENQ-1004',
-                            'buyer' => 'Vishnu',
-                            'seller' => 'Global Steel',
-                            'listing' => 'Steel Rods',
-                            'type' => 'Product',
-                            'date' => '2 days ago',
-                            'status' => 'Closed',
-                            'priority' => 'High',
-                        ],
-                    ];
-
-                @endphp
-
-                @foreach ($enquiries as $enquiry)
+                @forelse ($enquiries as $enquiry)
                     <tr>
 
                         <td>
-
                             <input type="checkbox" class="form-check-input">
-
                         </td>
 
                         <td>
 
                             <div class="fw-semibold">
-
-                                {{ $enquiry['id'] }}
-
+                                {{ $enquiry->enquiry_number }}
                             </div>
 
-                            <small class="text-muted">
-
-                                {{ $enquiry['type'] }}
-
+                            <small class="text-muted text-capitalize">
+                                {{ $enquiry->listing_type ?? '-' }}
                             </small>
 
                         </td>
 
-                        <td>{{ $enquiry['buyer'] }}</td>
+                        <td>{{ $enquiry->buyer->name ?? '-' }}</td>
 
-                        <td>{{ $enquiry['seller'] }}</td>
+                        <td>{{ $enquiry->company->name ?? '-' }}</td>
 
-                        <td>{{ $enquiry['listing'] }}</td>
+                        <td>{{ $enquiry->listing_name ?? '-' }}</td>
 
-                        <td>{{ $enquiry['date'] }}</td>
+                        <td>{{ $enquiry->created_at->diffForHumans() }}</td>
 
                         <td>
 
-                            @if ($enquiry['status'] == 'Open')
+                            @if ($enquiry->status == 'open')
                                 <span class="badge bg-success-subtle text-success">
-
                                     Open
-
                                 </span>
                             @else
                                 <span class="badge bg-secondary-subtle text-secondary">
-
                                     Closed
-
                                 </span>
                             @endif
 
@@ -158,23 +101,17 @@
 
                         <td>
 
-                            @if ($enquiry['priority'] == 'High')
+                            @if ($enquiry->priority == 'high')
                                 <span class="badge bg-danger">
-
                                     High
-
                                 </span>
-                            @elseif($enquiry['priority'] == 'Medium')
+                            @elseif($enquiry->priority == 'medium')
                                 <span class="badge bg-warning text-dark">
-
                                     Medium
-
                                 </span>
                             @else
                                 <span class="badge bg-info">
-
                                     Low
-
                                 </span>
                             @endif
 
@@ -182,60 +119,51 @@
 
                         <td class="text-center">
 
-                            <div class="dropdown">
+                            <div class="d-flex align-items-center justify-content-center gap-1" role="group">
 
-                                <button class="btn btn-light btn-sm" data-bs-toggle="dropdown">
+                                {{-- View --}}
+                                <a href="{{ route('admin.enquiries.show', $enquiry) }}" class="btn btn-sm btn-info"
+                                    title="View Conversation">
+                                    <i class="bi bi-chat-left-text"></i>
+                                </a>
 
-                                    <i class="bi bi-three-dots"></i>
+                                {{-- Toggle Status --}}
+                                <form action="{{ route('admin.enquiries.update', $enquiry) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="status"
+                                        value="{{ $enquiry->status == 'open' ? 'closed' : 'open' }}">
+                                    <button type="submit"
+                                        class="btn btn-sm {{ $enquiry->status == 'open' ? 'btn-success' : 'btn-outline-success' }}"
+                                        title="{{ $enquiry->status == 'open' ? 'Mark Closed' : 'Reopen' }}">
+                                        <i class="bi bi-check-lg"></i>
+                                    </button>
+                                </form>
 
-                                </button>
-
-                                <ul class="dropdown-menu dropdown-menu-end shadow">
-
-                                    <li>
-
-                                        <a class="dropdown-item" href="{{ route('admin.enquiries.show', 1) }}">
-
-                                            <i class="bi bi-chat-left-text me-2"></i>
-
-                                            View Conversation
-
-                                        </a>
-
-                                    </li>
-
-                                    <li>
-
-                                        <a class="dropdown-item">
-
-                                            <i class="bi bi-check-circle me-2 text-success"></i>
-
-                                            Mark Closed
-
-                                        </a>
-
-                                    </li>
-
-                                    <li>
-
-                                        <a class="dropdown-item">
-
-                                            <i class="bi bi-flag me-2 text-warning"></i>
-
-                                            Flag
-
-                                        </a>
-
-                                    </li>
-
-                                </ul>
+                                {{-- Delete --}}
+                                <form action="{{ route('admin.enquiries.destroy', $enquiry) }}" method="POST"
+                                    onsubmit="return confirm('Delete this enquiry?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
 
                             </div>
 
                         </td>
 
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="9" class="text-center py-5">
+                            <i class="bi bi-chat-left-text display-5 text-muted"></i>
+                            <h5 class="mt-3">No Enquiries Found</h5>
+                            <p class="text-muted mb-0">There are currently no enquiries matching your filters.</p>
+                        </td>
+                    </tr>
+                @endforelse
 
             </tbody>
 
@@ -243,40 +171,10 @@
 
     </div>
 
-    <div class="card-footer bg-white">
-
-        <nav>
-
-            <ul class="pagination justify-content-end mb-0">
-
-                <li class="page-item disabled">
-
-                    <a class="page-link">Previous</a>
-
-                </li>
-
-                <li class="page-item active">
-
-                    <a class="page-link">1</a>
-
-                </li>
-
-                <li class="page-item">
-
-                    <a class="page-link">2</a>
-
-                </li>
-
-                <li class="page-item">
-
-                    <a class="page-link">Next</a>
-
-                </li>
-
-            </ul>
-
-        </nav>
-
-    </div>
+    @if ($enquiries->hasPages())
+        <div class="card-footer bg-white">
+            {{ $enquiries->links() }}
+        </div>
+    @endif
 
 </div>

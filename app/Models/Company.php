@@ -68,4 +68,9 @@ class Company extends Model
     {
         return $this->hasMany(Enquiry::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

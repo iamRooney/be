@@ -20,23 +20,30 @@
 
                 <h3 class="fw-bold mt-3">
 
-                    Enquiry ENQ-1001
+                    Enquiry {{ $enquiry->enquiry_number }}
 
                 </h3>
 
-                <p class="text-muted">
+                <p class="text-muted mb-0">
 
-                    Product Enquiry
+                    {{ $enquiry->product_id ? 'Product Enquiry' : 'Service Enquiry' }}
 
                 </p>
 
             </div>
 
-            <button class="btn btn-success">
-
-                Mark Closed
-
-            </button>
+            @if ($enquiry->status == 'open')
+                <form action="{{ route('admin.enquiries.update', $enquiry) }}" method="POST">
+                    @csrf
+                    @method('PATCH')
+                    <input type="hidden" name="status" value="closed">
+                    <button type="submit" class="btn btn-success">
+                        Mark Closed
+                    </button>
+                </form>
+            @else
+                <span class="badge bg-secondary fs-6">Closed</span>
+            @endif
 
         </div>
 

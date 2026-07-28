@@ -12,7 +12,7 @@ class EnquiryController extends Controller
     {
         $data = $request->validated();
 
-        $data['user_id'] = auth()->id();
+        $data['user_id'] = $request->user()->id;
 
         $data['status'] = 'open';
 

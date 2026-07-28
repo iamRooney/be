@@ -12,33 +12,28 @@
 
     <div class="card-body">
 
-        <textarea class="form-control mb-3" rows="4" placeholder="Internal admin notes..."></textarea>
-
         <div class="d-grid gap-2">
 
-            <button class="btn btn-success">
+            <form action="{{ route('admin.enquiries.update', $enquiry) }}" method="POST">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" value="{{ $enquiry->status == 'open' ? 'closed' : 'open' }}">
+                <button type="submit"
+                    class="btn {{ $enquiry->status == 'open' ? 'btn-success' : 'btn-outline-success' }} w-100">
+                    <i class="bi bi-check-circle me-2"></i>
+                    {{ $enquiry->status == 'open' ? 'Mark Closed' : 'Reopen Enquiry' }}
+                </button>
+            </form>
 
-                <i class="bi bi-check-circle me-2"></i>
-
-                Mark Closed
-
-            </button>
-
-            <button class="btn btn-warning">
-
-                <i class="bi bi-flag me-2"></i>
-
-                Flag Conversation
-
-            </button>
-
-            <button class="btn btn-danger">
-
-                <i class="bi bi-trash me-2"></i>
-
-                Delete Enquiry
-
-            </button>
+            <form action="{{ route('admin.enquiries.destroy', $enquiry) }}" method="POST"
+                onsubmit="return confirm('Delete this enquiry? This cannot be undone.')">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger w-100">
+                    <i class="bi bi-trash me-2"></i>
+                    Delete Enquiry
+                </button>
+            </form>
 
         </div>
 
