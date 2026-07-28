@@ -14,21 +14,63 @@ class ProfileController extends Controller
     {
         return DB::transaction(function () use ($request) {
 
-        $user = $request->user();
+            $user = $request->user();
 
-        $request->validate([
-            'role' => 'required|in:buyer,seller',
-            'name' => 'required|string|max:255',
-            'email' => 'nullable|email|unique:users,email,' . $user->id,
-        ]);
+            $request->validate([
+                'role' => 'required|in:buyer,seller',
+                'name' => 'required|string|max:255',
+                'email' => 'nullable|email|unique:users,email,' . $user->id,
+            ]);
 
-        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'role' => $request->role,
-        ]);
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'role' => $request->role,
+            ]);
 
-        if ($request->role === 'buyer') {
+            if ($request->role === 'buyer') {
+
+                $user->update([
+                    'is_profile_completed' => true,
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Buyer profile completed successfully.',
+                    'data' => $user,
+                ]);
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Seller Validation
+        |--------------------------------------------------------------------------
+        */
+
+            $request->validate([
+                'company_name' => 'required|string|max:255',
+                'country_id' => 'required|exists:countries,id',
+                'state_id' => 'required|exists:states,id',
+                'city_id' => 'required|exists:cities,id',
+            ]);
+
+            Company::create([
+                'user_id' => $user->id,
+
+                'name' => $request->company_name,
+
+                'slug' => Str::slug($request->company_name),
+
+                'country_id' => $request->country_id,
+
+                'state_id' => $request->state_id,
+
+                'city_id' => $request->city_id,
+
+                'phone' => $user->phone,
+
+                'email' => $user->email,
+            ]);
 
             $user->update([
                 'is_profile_completed' => true,
@@ -36,51 +78,9 @@ class ProfileController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'Buyer profile completed successfully.',
+                'message' => 'Seller profile completed successfully.',
                 'data' => $user,
             ]);
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Seller Validation
-        |--------------------------------------------------------------------------
-        */
-
-        $request->validate([
-            'company_name' => 'required|string|max:255',
-            'country_id' => 'required|exists:countries,id',
-            'state_id' => 'required|exists:states,id',
-            'city_id' => 'required|exists:cities,id',
-        ]);
-
-        Company::create([
-            'user_id' => $user->id,
-
-            'name' => $request->company_name,
-
-            'slug' => Str::slug($request->company_name),
-
-            'country_id' => $request->country_id,
-
-            'state_id' => $request->state_id,
-
-            'city_id' => $request->city_id,
-
-            'phone' => $user->phone,
-
-            'email' => $user->email,
-        ]);
-
-        $user->update([
-            'is_profile_completed' => true,
-        ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Seller profile completed successfully.',
-            'data' => $user,
-        ]);
+        });
     }
 }
-

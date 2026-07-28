@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Company;
 use App\Models\Enquiry;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -20,7 +21,7 @@ class User extends Authenticatable
         'phone',
         'email',
         'role',
-        'is_profile_completed' => 'boolean',
+        'is_profile_completed',
         'profile_image',
         'password',
         'otp',
@@ -49,6 +50,7 @@ class User extends Authenticatable
             'otp_verified_at' => 'datetime',
             'password' => 'hashed',
             'status' => 'boolean',
+            'is_profile_completed' => 'boolean',
         ];
     }
 
@@ -61,5 +63,10 @@ class User extends Authenticatable
     public function enquiries()
     {
         return $this->hasMany(Enquiry::class);
+    }
+
+    public function company()
+    {
+        return $this->hasOne(Company::class);
     }
 }
