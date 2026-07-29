@@ -17,6 +17,7 @@ use App\Http\Controllers\Api\EnquiryController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProfileController;
+use App\Http\Controllers\Api\ProductController as SellerProductController;
 
 // Public APIs (read-only)
 Route::apiResource('countries', CountryController::class);
@@ -113,4 +114,10 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/profile/complete', [ProfileController::class, 'complete']);
+});
+
+// Authenticated Seller APIs (manage their own company's products)
+Route::middleware('auth:sanctum')->prefix('seller')->name('seller.')->group(function () {
+
+    Route::apiResource('products', SellerProductController::class)->except(['show']);
 });

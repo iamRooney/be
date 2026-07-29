@@ -68,6 +68,12 @@ class DashboardController extends Controller
         // (there is no dedicated activity-log table yet, so this is assembled
         // from each model's own timestamps rather than a true audit trail).
         $recentActivities = collect()
+            ->concat(Company::latest()->take(2)->get()->map(fn($c) => (object) [
+                'icon' => 'bi-building-fill-add text-primary',
+                'title' => 'New Company Registered',
+                'subtitle' => $c->name,
+                'time' => $c->created_at,
+            ]))
             ->concat(Company::where('verified', true)->latest('updated_at')->take(2)->get()->map(fn($c) => (object) [
                 'icon' => 'bi-check-circle-fill text-success',
                 'title' => 'Company Verified',
