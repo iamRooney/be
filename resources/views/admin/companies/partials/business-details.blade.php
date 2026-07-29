@@ -16,25 +16,33 @@
 
             <tr>
 
-                <th width="35%">Business Type</th>
+                <th width="35%">Employees</th>
 
-                <td>Manufacturer</td>
-
-            </tr>
-
-            <tr>
-
-                <th>Employees</th>
-
-                <td>150</td>
+                <td>{{ $company->staff_count ?: 'Not provided' }}</td>
 
             </tr>
 
             <tr>
 
-                <th>Established</th>
+                <th>Years in Business</th>
 
-                <td>2018</td>
+                <td>{{ $company->years_in_business ?: 'Not provided' }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Annual Turnover</th>
+
+                <td>{{ $company->annual_turnover ?? 'Not provided' }}</td>
+
+            </tr>
+
+            <tr>
+
+                <th>Country</th>
+
+                <td>{{ $company->country->name ?? 'Not provided' }}</td>
 
             </tr>
 
@@ -42,7 +50,7 @@
 
                 <th>State</th>
 
-                <td>Kerala</td>
+                <td>{{ $company->state->name ?? 'Not provided' }}</td>
 
             </tr>
 
@@ -50,7 +58,7 @@
 
                 <th>City</th>
 
-                <td>Kochi</td>
+                <td>{{ $company->city->name ?? 'Not provided' }}</td>
 
             </tr>
 
@@ -58,7 +66,7 @@
 
                 <th>Address</th>
 
-                <td>MG Road, Kochi</td>
+                <td>{{ $company->address ?? 'Not provided' }}</td>
 
             </tr>
 

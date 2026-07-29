@@ -14,27 +14,29 @@
 
     <div class="card-body">
 
-        @foreach ([['ABC Electronics', 'Pending', '2 mins ago'], ['Kerala Traders', 'Verified', '15 mins ago'], ['Global Steel', 'Pending', '35 mins ago'], ['Prime Industries', 'Verified', '1 hour ago']] as $company)
+        @forelse ($recentCompanies as $company)
             <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
 
                 <div>
 
                     <div class="fw-semibold">
-                        {{ $company[0] }}
+                        {{ $company->name }}
                     </div>
 
                     <small class="text-muted">
-                        {{ $company[2] }}
+                        {{ $company->created_at->diffForHumans() }}
                     </small>
 
                 </div>
 
-                <span class="badge bg-{{ $company[1] == 'Verified' ? 'success' : 'warning text-dark' }}">
-                    {{ $company[1] }}
+                <span class="badge bg-{{ $company->verified ? 'success' : 'warning text-dark' }}">
+                    {{ $company->verified ? 'Verified' : 'Pending' }}
                 </span>
 
             </div>
-        @endforeach
+        @empty
+            <p class="text-muted mb-0">No companies yet.</p>
+        @endforelse
 
     </div>
 

@@ -12,7 +12,7 @@
 
     <div class="card-body">
 
-        <a href="#" class="approval-item text-decoration-none">
+        <a href="{{ route('admin.companies.index', ['status' => 'pending']) }}" class="approval-item text-decoration-none">
 
             <div>
 
@@ -24,13 +24,13 @@
 
             <span class="badge bg-warning text-dark">
 
-                12
+                {{ $approvals['companies'] }}
 
             </span>
 
         </a>
 
-        <a href="#" class="approval-item text-decoration-none">
+        <a href="{{ route('admin.listings.products.index', ['status' => 'pending']) }}" class="approval-item text-decoration-none">
 
             <div>
 
@@ -42,13 +42,13 @@
 
             <span class="badge bg-danger">
 
-                48
+                {{ $approvals['products'] }}
 
             </span>
 
         </a>
 
-        <a href="#" class="approval-item text-decoration-none">
+        <a href="{{ route('admin.listings.services.index', ['status' => 'pending']) }}" class="approval-item text-decoration-none">
 
             <div>
 
@@ -60,7 +60,7 @@
 
             <span class="badge bg-success">
 
-                9
+                {{ $approvals['services'] }}
 
             </span>
 

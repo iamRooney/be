@@ -43,7 +43,7 @@
 
             data: {
 
-                labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+                labels: {!! $analytics['labels']->toJson() !!},
 
                 datasets: [
 
@@ -51,7 +51,7 @@
 
                         label: 'Companies',
 
-                        data: [8, 12, 15, 19, 25, 32],
+                        data: {!! $analytics['companies']->toJson() !!},
 
                         borderColor: '#2563eb',
 
@@ -67,7 +67,7 @@
 
                         label: 'Products',
 
-                        data: [25, 38, 45, 58, 74, 96],
+                        data: {!! $analytics['products']->toJson() !!},
 
                         borderColor: '#10b981',
 
@@ -81,7 +81,7 @@
 
                         label: 'Services',
 
-                        data: [12, 15, 18, 26, 34, 42],
+                        data: {!! $analytics['services']->toJson() !!},
 
                         borderColor: '#f97316',
 

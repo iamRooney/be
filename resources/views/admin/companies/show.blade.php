@@ -20,13 +20,13 @@
 
                 <h3 class="fw-bold mt-3">
 
-                    ABC Electronics
+                    {{ $company->name }}
 
                 </h3>
 
                 <p class="text-muted">
 
-                    Registered on 12 June 2026
+                    Registered on {{ $company->created_at->format('d F Y') }}
 
                 </p>
 
@@ -34,19 +34,24 @@
 
             <div class="d-flex gap-2">
 
-                <button class="btn btn-success">
-
-                    <i class="bi bi-patch-check me-2"></i>
-
-                    Verify
-
-                </button>
-
-                <button class="btn btn-danger">
-
-                    Reject
-
-                </button>
+                @if (! $company->verified)
+                    <form action="{{ route('admin.companies.toggle-verified', $company) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-patch-check me-2"></i>
+                            Verify
+                        </button>
+                    </form>
+                @else
+                    <form action="{{ route('admin.companies.toggle-verified', $company) }}" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="btn btn-danger">
+                            Unverify
+                        </button>
+                    </form>
+                @endif
 
             </div>
 

@@ -4,7 +4,9 @@
 
         <div>
             <h5 class="fw-bold mb-1">All Companies</h5>
-            <small class="text-muted">Showing 10 of 1,284 companies</small>
+            <small class="text-muted">
+                Showing {{ $companies->firstItem() ?? 0 }}-{{ $companies->lastItem() ?? 0 }} of {{ $companies->total() }} companies
+            </small>
         </div>
 
         <div class="d-flex gap-2">
@@ -37,7 +39,7 @@
 
                     <th>Owner</th>
 
-                    <th>Business</th>
+                    <th>Contact</th>
 
                     <th>Location</th>
 
@@ -53,58 +55,7 @@
 
             <tbody>
 
-                @php
-
-                    $companies = [
-                        [
-                            'company' => 'ABC Electronics',
-                            'owner' => 'Rahul Nair',
-                            'business' => 'Manufacturer',
-                            'city' => 'Kochi',
-                            'joined' => '2 days ago',
-                            'status' => 'Verified',
-                        ],
-
-                        [
-                            'company' => 'Prime Industries',
-                            'owner' => 'Sanjay Kumar',
-                            'business' => 'Wholesaler',
-                            'city' => 'Thrissur',
-                            'joined' => '4 days ago',
-                            'status' => 'Pending',
-                        ],
-
-                        [
-                            'company' => 'Global Steel',
-                            'owner' => 'Arun Joseph',
-                            'business' => 'Exporter',
-                            'city' => 'Coimbatore',
-                            'joined' => '1 week ago',
-                            'status' => 'Rejected',
-                        ],
-
-                        [
-                            'company' => 'Tech Solutions',
-                            'owner' => 'Anil Das',
-                            'business' => 'Service Provider',
-                            'city' => 'Bangalore',
-                            'joined' => '2 weeks ago',
-                            'status' => 'Verified',
-                        ],
-
-                        [
-                            'company' => 'Green Agro',
-                            'owner' => 'Vishnu P',
-                            'business' => 'Retailer',
-                            'city' => 'Palakkad',
-                            'joined' => '3 weeks ago',
-                            'status' => 'Pending',
-                        ],
-                    ];
-
-                @endphp
-
-                @foreach ($companies as $company)
+                @forelse ($companies as $company)
                     <tr>
 
                         <td>
@@ -119,7 +70,7 @@
 
                                 <div class="company-logo me-3">
 
-                                    {{ strtoupper(substr($company['company'], 0, 1)) }}
+                                    {{ strtoupper(substr($company->name, 0, 1)) }}
 
                                 </div>
 
@@ -127,13 +78,13 @@
 
                                     <div class="fw-semibold">
 
-                                        {{ $company['company'] }}
+                                        {{ $company->name }}
 
                                     </div>
 
                                     <small class="text-muted">
 
-                                        ID #CMP{{ rand(1000, 9999) }}
+                                        ID #CMP{{ str_pad($company->id, 4, '0', STR_PAD_LEFT) }}
 
                                     </small>
 
@@ -143,32 +94,26 @@
 
                         </td>
 
-                        <td>{{ $company['owner'] }}</td>
+                        <td>{{ $company->user->name ?? '—' }}</td>
 
-                        <td>{{ $company['business'] }}</td>
+                        <td>{{ $company->phone ?? '—' }}</td>
 
-                        <td>{{ $company['city'] }}</td>
+                        <td>{{ $company->city->name ?? '—' }}</td>
 
-                        <td>{{ $company['joined'] }}</td>
+                        <td>{{ $company->created_at->diffForHumans() }}</td>
 
                         <td>
 
-                            @if ($company['status'] == 'Verified')
+                            @if ($company->verified)
                                 <span class="badge bg-success-subtle text-success px-3 py-2">
 
                                     Verified
 
                                 </span>
-                            @elseif($company['status'] == 'Pending')
+                            @else
                                 <span class="badge bg-warning-subtle text-warning px-3 py-2">
 
                                     Pending
-
-                                </span>
-                            @else
-                                <span class="badge bg-danger-subtle text-danger px-3 py-2">
-
-                                    Rejected
 
                                 </span>
                             @endif
@@ -189,7 +134,7 @@
 
                                     <li>
 
-                                        <a class="dropdown-item" href="{{ route('admin.companies.show', 1) }}">
+                                        <a class="dropdown-item" href="{{ route('admin.companies.show', $company) }}">
 
                                             <i class="bi bi-eye me-2"></i>
 
@@ -199,29 +144,33 @@
 
                                     </li>
 
-                                    <li>
+                                    @if (! $company->verified)
+                                        <li>
 
-                                        <a class="dropdown-item text-success" href="#">
+                                            <form action="{{ route('admin.companies.toggle-verified', $company) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="dropdown-item text-success">
+                                                    <i class="bi bi-patch-check me-2"></i>
+                                                    Verify
+                                                </button>
+                                            </form>
 
-                                            <i class="bi bi-patch-check me-2"></i>
+                                        </li>
+                                    @else
+                                        <li>
 
-                                            Verify
+                                            <form action="{{ route('admin.companies.toggle-verified', $company) }}" method="POST">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="bi bi-x-circle me-2"></i>
+                                                    Unverify
+                                                </button>
+                                            </form>
 
-                                        </a>
-
-                                    </li>
-
-                                    <li>
-
-                                        <a class="dropdown-item text-danger" href="#">
-
-                                            <i class="bi bi-x-circle me-2"></i>
-
-                                            Reject
-
-                                        </a>
-
-                                    </li>
+                                        </li>
+                                    @endif
 
                                 </ul>
 
@@ -230,7 +179,11 @@
                         </td>
 
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-4">No companies found.</td>
+                    </tr>
+                @endforelse
 
             </tbody>
 
@@ -240,43 +193,7 @@
 
     <div class="card-footer bg-white">
 
-        <nav>
-
-            <ul class="pagination justify-content-end mb-0">
-
-                <li class="page-item disabled">
-
-                    <a class="page-link">Previous</a>
-
-                </li>
-
-                <li class="page-item active">
-
-                    <a class="page-link">1</a>
-
-                </li>
-
-                <li class="page-item">
-
-                    <a class="page-link">2</a>
-
-                </li>
-
-                <li class="page-item">
-
-                    <a class="page-link">3</a>
-
-                </li>
-
-                <li class="page-item">
-
-                    <a class="page-link">Next</a>
-
-                </li>
-
-            </ul>
-
-        </nav>
+        {{ $companies->links() }}
 
     </div>
 

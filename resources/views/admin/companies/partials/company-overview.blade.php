@@ -6,7 +6,7 @@
 
             <div class="company-avatar">
 
-                A
+                {{ strtoupper(substr($company->name, 0, 1)) }}
 
             </div>
 
@@ -14,21 +14,25 @@
 
                 <h4 class="fw-bold mb-1">
 
-                    ABC Electronics
+                    {{ $company->name }}
 
                 </h4>
 
                 <p class="text-muted mb-2">
 
-                    Manufacturer • Electronics
+                    {{ $company->city->name ?? 'Location not set' }}
 
                 </p>
 
-                <span class="badge bg-success">
-
-                    Verified Company
-
-                </span>
+                @if ($company->verified)
+                    <span class="badge bg-success">
+                        Verified Company
+                    </span>
+                @else
+                    <span class="badge bg-warning text-dark">
+                        Pending Verification
+                    </span>
+                @endif
 
             </div>
 
@@ -46,7 +50,7 @@
 
                 </p>
 
-                <p>Rahul Nair</p>
+                <p>{{ $company->user->name ?? 'Not linked to a user account' }}</p>
 
             </div>
 
@@ -58,7 +62,7 @@
 
                 </p>
 
-                <p>32ABCDE1234F1Z5</p>
+                <p>{{ $company->gst_number ?? 'Not provided' }}</p>
 
             </div>
 
@@ -70,7 +74,7 @@
 
                 </p>
 
-                <p>abc@gmail.com</p>
+                <p>{{ $company->email }}</p>
 
             </div>
 
@@ -82,7 +86,7 @@
 
                 </p>
 
-                <p>+91 9876543210</p>
+                <p>{{ $company->phone }}</p>
 
             </div>
 

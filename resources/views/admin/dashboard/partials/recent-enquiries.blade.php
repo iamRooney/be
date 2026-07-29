@@ -28,35 +28,25 @@
 
             <tbody>
 
-                <tr>
+                @forelse ($recentEnquiries as $enquiry)
+                    <tr>
 
-                    <td>Rahul</td>
+                        <td>{{ $enquiry->buyer->name ?? 'N/A' }}</td>
 
-                    <td>ABC Electronics</td>
+                        <td>{{ $enquiry->company->name ?? 'N/A' }}</td>
 
-                    <td><span class="badge bg-success">Open</span></td>
+                        <td>
+                            <span class="badge bg-{{ $enquiry->status === 'open' ? 'success' : 'secondary' }}">
+                                {{ ucfirst($enquiry->status) }}
+                            </span>
+                        </td>
 
-                </tr>
-
-                <tr>
-
-                    <td>Sanjay</td>
-
-                    <td>Prime Industries</td>
-
-                    <td><span class="badge bg-warning text-dark">Pending</span></td>
-
-                </tr>
-
-                <tr>
-
-                    <td>Arjun</td>
-
-                    <td>Global Steel</td>
-
-                    <td><span class="badge bg-secondary">Closed</span></td>
-
-                </tr>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="3" class="text-muted text-center">No enquiries yet.</td>
+                    </tr>
+                @endforelse
 
             </tbody>
 

@@ -12,33 +12,35 @@
 
     <div class="card-body">
 
-        @foreach ([['Arduino UNO', 'Product', 'Pending'], ['Industrial Pump', 'Product', 'Approved'], ['CNC Cutting', 'Service', 'Pending'], ['Website Development', 'Service', 'Approved']] as $listing)
+        @forelse ($recentListings as $listing)
             <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
 
                 <div>
 
                     <div class="fw-semibold">
 
-                        {{ $listing[0] }}
+                        {{ $listing->name }}
 
                     </div>
 
                     <small class="text-muted">
 
-                        {{ $listing[1] }}
+                        {{ $listing->type }}
 
                     </small>
 
                 </div>
 
-                <span class="badge bg-{{ $listing[2] == 'Approved' ? 'success' : 'warning text-dark' }}">
+                <span class="badge bg-{{ $listing->status == 'Approved' ? 'success' : 'warning text-dark' }}">
 
-                    {{ $listing[2] }}
+                    {{ $listing->status }}
 
                 </span>
 
             </div>
-        @endforeach
+        @empty
+            <p class="text-muted mb-0">No listings yet.</p>
+        @endforelse
 
     </div>
 

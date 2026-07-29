@@ -12,23 +12,11 @@
 
     <div class="list-group list-group-flush">
 
-        <a href="#" class="list-group-item">
+        <div class="list-group-item text-muted">
 
-            GST Certificate
+            Document uploads aren't supported yet — only a GST number field exists on the company record.
 
-        </a>
-
-        <a href="#" class="list-group-item">
-
-            Business License
-
-        </a>
-
-        <a href="#" class="list-group-item">
-
-            PAN Card
-
-        </a>
+        </div>
 
     </div>
 

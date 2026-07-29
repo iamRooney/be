@@ -2,10 +2,10 @@
 
     @php
 
-        $stats = [
+        $statCards = [
             [
                 'title' => 'Companies',
-                'count' => 328,
+                'count' => $stats['companies'],
                 'icon' => 'bi-building',
                 'color' => 'primary',
                 'subtitle' => 'Registered companies',
@@ -13,7 +13,7 @@
 
             [
                 'title' => 'Pending Companies',
-                'count' => 18,
+                'count' => $stats['pending_companies'],
                 'icon' => 'bi-hourglass-split',
                 'color' => 'warning',
                 'subtitle' => 'Awaiting verification',
@@ -21,7 +21,7 @@
 
             [
                 'title' => 'Buyers',
-                'count' => 842,
+                'count' => $stats['buyers'],
                 'icon' => 'bi-person',
                 'color' => 'info',
                 'subtitle' => 'Registered buyers',
@@ -29,7 +29,7 @@
 
             [
                 'title' => 'Sellers',
-                'count' => 403,
+                'count' => $stats['sellers'],
                 'icon' => 'bi-shop',
                 'color' => 'success',
                 'subtitle' => 'Registered sellers',
@@ -37,7 +37,7 @@
 
             [
                 'title' => 'Pending Products',
-                'count' => 56,
+                'count' => $stats['pending_products'],
                 'icon' => 'bi-box-seam',
                 'color' => 'danger',
                 'subtitle' => 'Waiting approval',
@@ -45,7 +45,7 @@
 
             [
                 'title' => 'Pending Services',
-                'count' => 14,
+                'count' => $stats['pending_services'],
                 'icon' => 'bi-tools',
                 'color' => 'secondary',
                 'subtitle' => 'Waiting approval',
@@ -54,7 +54,7 @@
 
     @endphp
 
-    @foreach ($stats as $stat)
+    @foreach ($statCards as $stat)
         <div class="col-xl-4 col-md-6">
 
             <div class="card border-0 shadow-sm rounded-4 stat-card h-100">

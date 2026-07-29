@@ -50,6 +50,11 @@ Route::prefix('admin')->group(function () {
         Route::resource('companies', CompanyController::class)
             ->names('admin.companies');
 
+        Route::patch(
+            'companies/{company}/toggle-verified',
+            [CompanyController::class, 'toggleVerified']
+        )->name('admin.companies.toggle-verified');
+
         Route::resource('users', UserController::class)
             ->names('admin.users');
 

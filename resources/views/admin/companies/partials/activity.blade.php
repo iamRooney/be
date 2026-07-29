@@ -14,29 +14,14 @@
 
         <ul class="list-group list-group-flush">
 
-            <li class="list-group-item">
-
-                Added Product
-
-            </li>
-
-            <li class="list-group-item">
-
-                Updated Company Profile
-
-            </li>
-
-            <li class="list-group-item">
-
-                Received New Enquiry
-
-            </li>
-
-            <li class="list-group-item">
-
-                Uploaded GST Document
-
-            </li>
+            @forelse ($activity as $item)
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>{{ $item->label }}</span>
+                    <small class="text-muted">{{ $item->time->diffForHumans() }}</small>
+                </li>
+            @empty
+                <li class="list-group-item text-muted">No activity yet.</li>
+            @endforelse
 
         </ul>
 

@@ -14,69 +14,25 @@
 
         <div class="timeline">
 
-            <div class="timeline-item">
+            @forelse ($recentActivities as $activity)
+                <div class="timeline-item">
 
-                <i class="bi bi-check-circle-fill text-success"></i>
+                    <i class="bi {{ $activity->icon }}"></i>
 
-                <div>
+                    <div>
 
-                    <strong>Company Verified</strong>
+                        <strong>{{ $activity->title }}</strong>
 
-                    <small class="text-muted d-block">
-                        ABC Electronics • 5 mins ago
-                    </small>
+                        <small class="text-muted d-block">
+                            {{ $activity->subtitle }} • {{ $activity->time->diffForHumans() }}
+                        </small>
 
-                </div>
-
-            </div>
-
-            <div class="timeline-item">
-
-                <i class="bi bi-box-fill text-primary"></i>
-
-                <div>
-
-                    <strong>Product Approved</strong>
-
-                    <small class="text-muted d-block">
-                        Arduino UNO • 15 mins ago
-                    </small>
+                    </div>
 
                 </div>
-
-            </div>
-
-            <div class="timeline-item">
-
-                <i class="bi bi-person-plus-fill text-info"></i>
-
-                <div>
-
-                    <strong>New Seller Registered</strong>
-
-                    <small class="text-muted d-block">
-                        40 mins ago
-                    </small>
-
-                </div>
-
-            </div>
-
-            <div class="timeline-item">
-
-                <i class="bi bi-grid-fill text-warning"></i>
-
-                <div>
-
-                    <strong>Category Updated</strong>
-
-                    <small class="text-muted d-block">
-                        1 hour ago
-                    </small>
-
-                </div>
-
-            </div>
+            @empty
+                <p class="text-muted mb-0">No recent activity.</p>
+            @endforelse
 
         </div>
 

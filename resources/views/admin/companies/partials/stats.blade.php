@@ -3,13 +3,13 @@
     @php
 
         $cards = [
-            ['Total Companies', 1284, 'primary', 'building'],
+            ['Total Companies', $stats['total'], 'primary', 'building'],
 
-            ['Pending', 84, 'warning', 'clock-history'],
+            ['Pending', $stats['pending'], 'warning', 'clock-history'],
 
-            ['Verified', 1136, 'success', 'patch-check'],
+            ['Verified', $stats['verified'], 'success', 'patch-check'],
 
-            ['Rejected', 64, 'danger', 'x-circle'],
+            ['Inactive', $stats['inactive'], 'danger', 'x-circle'],
         ];
 
     @endphp

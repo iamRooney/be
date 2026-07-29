@@ -16,21 +16,25 @@
 
             <span>Status</span>
 
-            <span class="badge bg-warning">
-
-                Pending
-
-            </span>
+            @if ($company->verified)
+                <span class="badge bg-success">
+                    Verified
+                </span>
+            @else
+                <span class="badge bg-warning">
+                    Pending
+                </span>
+            @endif
 
         </div>
 
         <div class="d-flex justify-content-between mb-3">
 
-            <span>Documents</span>
+            <span>GST Number</span>
 
-            <span class="text-success">
+            <span class="{{ $company->gst_number ? 'text-success' : 'text-muted' }}">
 
-                Uploaded
+                {{ $company->gst_number ? 'Provided' : 'Not provided' }}
 
             </span>
 
@@ -38,11 +42,11 @@
 
         <div class="d-flex justify-content-between">
 
-            <span>KYC</span>
+            <span>Account Status</span>
 
-            <span class="text-success">
+            <span class="{{ $company->status ? 'text-success' : 'text-danger' }}">
 
-                Completed
+                {{ $company->status ? 'Active' : 'Inactive' }}
 
             </span>
 
