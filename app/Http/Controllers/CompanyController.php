@@ -42,6 +42,9 @@ class CompanyController extends Controller
         ]);
 
         $company = Company::create([
+            'user_id' => $request->user()->id,
+
+
             'country_id' => $request->country_id,
             'state_id' => $request->state_id,
             'city_id' => $request->city_id,
