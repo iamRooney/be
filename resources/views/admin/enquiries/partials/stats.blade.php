@@ -3,13 +3,13 @@
     @php
 
         $cards = [
-            ['Total', 842, 'primary', 'chat-left-text'],
+            ['Total', $stats['total'], 'primary', 'chat-left-text'],
 
-            ['Open', 152, 'success', 'chat-dots'],
+            ['Open', $stats['open'], 'success', 'chat-dots'],
 
-            ['Closed', 610, 'secondary', 'check-circle'],
+            ['Closed', $stats['closed'], 'secondary', 'check-circle'],
 
-            ['Today', 18, 'warning', 'clock'],
+            ['Today', $stats['today'], 'warning', 'clock'],
         ];
 
     @endphp

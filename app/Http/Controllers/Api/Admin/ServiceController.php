@@ -121,4 +121,45 @@ class ServiceController extends Controller
             'message' => 'Service deleted successfully.'
         ]);
     }
+
+    public function approve(Service $service)
+    {
+        $service->update([
+            'status' => 'approved'
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Service approved successfully.',
+            'data' => $service->fresh()->load(['company', 'category'])
+        ]);
+    }
+
+    public function reject(Service $service)
+    {
+        $service->update([
+            'status' => 'rejected'
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Service rejected successfully.',
+            'data' => $service->fresh()->load(['company', 'category'])
+        ]);
+    }
+
+    public function toggleFeatured(Service $service)
+    {
+        $service->update([
+            'featured' => ! $service->featured,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $service->featured
+                ? 'Service marked as featured.'
+                : 'Service removed from featured.',
+            'data' => $service->fresh()->load(['company', 'category'])
+        ]);
+    }
 }

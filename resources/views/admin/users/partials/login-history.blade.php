@@ -12,21 +12,9 @@
 
     <div class="list-group list-group-flush">
 
-        <div class="list-group-item">
+        <div class="list-group-item text-muted text-center py-4">
 
-            Today • Chrome • Kerala
-
-        </div>
-
-        <div class="list-group-item">
-
-            Yesterday • Android
-
-        </div>
-
-        <div class="list-group-item">
-
-            2 days ago • Chrome
+            Login history isn't tracked yet.
 
         </div>
 

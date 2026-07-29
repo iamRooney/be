@@ -12,27 +12,9 @@
 
     <div class="list-group list-group-flush">
 
-        <div class="list-group-item">
+        <div class="list-group-item text-muted text-center py-4">
 
-            Added Product
-
-        </div>
-
-        <div class="list-group-item">
-
-            Updated Company Profile
-
-        </div>
-
-        <div class="list-group-item">
-
-            Responded to Enquiry
-
-        </div>
-
-        <div class="list-group-item">
-
-            Logged In
+            Activity log isn't tracked yet.
 
         </div>
 

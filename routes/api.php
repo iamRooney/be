@@ -11,31 +11,71 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\ServiceController;
+use App\Http\Controllers\Api\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Api\Admin\EnquiryController as AdminEnquiryController;
 use App\Http\Controllers\Api\EnquiryController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProfileController;
 
-// Public APIs
+// Public APIs (read-only)
 Route::apiResource('countries', CountryController::class);
 Route::apiResource('states', StateController::class);
 Route::apiResource('cities', CityController::class);
-Route::apiResource('companies', CompanyController::class);
-Route::apiResource('categories', CategoryController::class);
+
+Route::apiResource('companies', CompanyController::class)->only([
+    'index', 'show'
+]);
+Route::apiResource('categories', CategoryController::class)->only([
+    'index', 'show'
+]);
 
 Route::get('/search', [SearchController::class, 'search']);
-
-// Buyer Auth APIs
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
 
 // Admin APIs
 Route::prefix('admin')->group(function () {
 
-    Route::get('/dashboard', DashboardController::class);
+    // Admin login is the only unauthenticated admin endpoint
+    Route::post('/login', [AdminAuthController::class, 'login']);
 
-    Route::apiResource('products', ProductController::class);
-    Route::apiResource('services', ServiceController::class);
+    Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+
+        Route::get('/me', [AdminAuthController::class, 'me']);
+        Route::post('/logout', [AdminAuthController::class, 'logout']);
+
+        Route::get('/dashboard', DashboardController::class);
+
+        Route::apiResource('products', ProductController::class);
+        Route::patch('products/{product}/approve', [ProductController::class, 'approve']);
+        Route::patch('products/{product}/reject', [ProductController::class, 'reject']);
+        Route::patch('products/{product}/feature', [ProductController::class, 'toggleFeatured']);
+
+        Route::apiResource('services', ServiceController::class);
+        Route::patch('services/{service}/approve', [ServiceController::class, 'approve']);
+        Route::patch('services/{service}/reject', [ServiceController::class, 'reject']);
+        Route::patch('services/{service}/feature', [ServiceController::class, 'toggleFeatured']);
+
+        Route::apiResource('enquiries', AdminEnquiryController::class)->only([
+            'index', 'show', 'update', 'destroy'
+        ]);
+    });
+});
+
+// Write access to companies/categories and all user management
+// is admin-only, kept on their original top-level paths.
+Route::middleware(['auth:sanctum', 'admin'])->group(function () {
+
+    Route::apiResource('companies', CompanyController::class)->only([
+        'store', 'update', 'destroy'
+    ]);
+
+    Route::apiResource('categories', CategoryController::class)->only([
+        'store', 'update', 'destroy'
+    ]);
+
+    Route::apiResource('users', UserController::class)->only([
+        'index', 'show', 'update', 'destroy',
+    ]);
 });
 
 Route::prefix('auth')->group(function () {
@@ -57,13 +97,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/enquiries', [EnquiryController::class, 'store']);
 });
-
-Route::apiResource('users', UserController::class)->only([
-    'index',
-    'show',
-    'update',
-    'destroy',
-]);
 
 Route::middleware('auth:sanctum')->group(function () {
 

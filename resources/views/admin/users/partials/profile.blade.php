@@ -6,7 +6,7 @@
 
             <div class="user-profile-avatar">
 
-                R
+                {{ strtoupper(substr($user->name, 0, 1)) }}
 
             </div>
 
@@ -14,19 +14,19 @@
 
                 <h4 class="fw-bold mb-1">
 
-                    Rahul Nair
+                    {{ $user->name }}
 
                 </h4>
 
                 <p class="text-muted mb-2">
 
-                    rahul@gmail.com
+                    {{ $user->email ?? $user->phone }}
 
                 </p>
 
                 <span class="badge bg-primary">
 
-                    Seller
+                    {{ ucfirst($user->role ?? 'buyer') }}
 
                 </span>
 

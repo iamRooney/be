@@ -16,11 +16,19 @@
 
             <span>Status</span>
 
-            <span class="badge bg-success">
+            @if ($user->status)
+                <span class="badge bg-success">
 
-                Active
+                    Active
 
-            </span>
+                </span>
+            @else
+                <span class="badge bg-danger">
+
+                    Suspended
+
+                </span>
+            @endif
 
         </div>
 
@@ -28,9 +36,9 @@
 
             <span>Email Verified</span>
 
-            <span class="text-success">
+            <span class="{{ $user->email_verified_at ? 'text-success' : 'text-muted' }}">
 
-                Yes
+                {{ $user->email_verified_at ? 'Yes' : 'No' }}
 
             </span>
 
@@ -40,9 +48,9 @@
 
             <span>Phone Verified</span>
 
-            <span class="text-success">
+            <span class="{{ $user->otp_verified_at ? 'text-success' : 'text-muted' }}">
 
-                Yes
+                {{ $user->otp_verified_at ? 'Yes' : 'No' }}
 
             </span>
 

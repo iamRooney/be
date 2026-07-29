@@ -89,4 +89,57 @@ class ProductController extends Controller
 
         ]);
     }
+
+    public function approve(Product $product): JsonResponse
+    {
+        $product->update([
+            'status' => 'approved'
+        ]);
+
+        return response()->json([
+
+            'success' => true,
+
+            'message' => 'Product approved successfully.',
+
+            'data' => new ProductResource($product)
+
+        ]);
+    }
+
+    public function reject(Product $product): JsonResponse
+    {
+        $product->update([
+            'status' => 'rejected'
+        ]);
+
+        return response()->json([
+
+            'success' => true,
+
+            'message' => 'Product rejected successfully.',
+
+            'data' => new ProductResource($product)
+
+        ]);
+    }
+
+    public function toggleFeatured(Product $product): JsonResponse
+    {
+        $product->update([
+            'featured' => ! $product->featured,
+        ]);
+
+        return response()->json([
+
+            'success' => true,
+
+            'message' => $product->featured
+                ? 'Product marked as featured.'
+                : 'Product removed from featured.',
+
+            'data' => new ProductResource($product)
+
+        ]);
+    }
 }

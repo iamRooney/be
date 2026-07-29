@@ -18,7 +18,7 @@
 
                 <th width="35%">Full Name</th>
 
-                <td>Rahul Nair</td>
+                <td>{{ $user->name }}</td>
 
             </tr>
 
@@ -26,7 +26,7 @@
 
                 <th>Email</th>
 
-                <td>rahul@gmail.com</td>
+                <td>{{ $user->email ?? '—' }}</td>
 
             </tr>
 
@@ -34,7 +34,7 @@
 
                 <th>Phone</th>
 
-                <td>+91 9876543210</td>
+                <td>{{ $user->phone }}</td>
 
             </tr>
 
@@ -42,7 +42,7 @@
 
                 <th>Role</th>
 
-                <td>Seller</td>
+                <td>{{ ucfirst($user->role ?? 'buyer') }}</td>
 
             </tr>
 
@@ -50,7 +50,7 @@
 
                 <th>Company</th>
 
-                <td>ABC Electronics</td>
+                <td>{{ $user->company->name ?? '-' }}</td>
 
             </tr>
 
@@ -58,7 +58,9 @@
 
                 <th>Location</th>
 
-                <td>Kochi, Kerala</td>
+                <td>
+                    {{ $user->company?->city?->name }}{{ $user->company?->city && $user->company?->state ? ', ' : '' }}{{ $user->company?->state?->name ?? '-' }}
+                </td>
 
             </tr>
 

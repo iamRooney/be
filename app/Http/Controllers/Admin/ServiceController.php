@@ -28,10 +28,18 @@ class ServiceController extends Controller
 
         $companies = Company::orderBy('name')->get();
 
+        $stats = [
+            'total' => Service::count(),
+            'pending' => Service::where('status', 'pending')->count(),
+            'approved' => Service::where('status', 'approved')->count(),
+            'rejected' => Service::where('status', 'rejected')->count(),
+        ];
+
         return view('admin.listings.services.index', compact(
             'services',
             'categories',
-            'companies'
+            'companies',
+            'stats'
         ));
     }
 

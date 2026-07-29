@@ -6,6 +6,8 @@ use App\Models\Company;
 use App\Models\Country;
 use App\Models\State;
 use App\Models\City;
+use App\Models\Product;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
@@ -36,12 +38,62 @@ class SearchController extends Controller
 
     private function products($query, $location)
     {
-        return [];
+        return Product::with([
+            'company',
+            'category'
+        ])
+
+            ->where('status', 'approved')
+
+            ->when($query, function ($q) use ($query) {
+                $q->where(function ($inner) use ($query) {
+
+                    $inner->where('name', 'LIKE', "%{$query}%")
+                        ->orWhere('short_description', 'LIKE', "%{$query}%");
+                });
+            })
+
+            ->when($location, function ($q) use ($location) {
+
+                $q->whereHas('company.city', function ($city) use ($location) {
+
+                    $city->where('name', 'LIKE', "%{$location}%");
+                });
+            })
+
+            ->limit(8)
+
+            ->get();
     }
 
     private function services($query, $location)
     {
-        return [];
+        return Service::with([
+            'company',
+            'category'
+        ])
+
+            ->where('status', 'approved')
+
+            ->when($query, function ($q) use ($query) {
+                $q->where(function ($inner) use ($query) {
+
+                    $inner->where('name', 'LIKE', "%{$query}%")
+                        ->orWhere('short_description', 'LIKE', "%{$query}%");
+                });
+            })
+
+            ->when($location, function ($q) use ($location) {
+
+                $q->whereHas('company.city', function ($city) use ($location) {
+
+                    $city->where('name', 'LIKE', "%{$location}%");
+                });
+            })
+
+            ->limit(8)
+
+            ->get();
     }
 
     private function companies($query, $location)

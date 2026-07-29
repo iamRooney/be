@@ -53,6 +53,11 @@ Route::prefix('admin')->group(function () {
         Route::resource('users', UserController::class)
             ->names('admin.users');
 
+        Route::patch(
+            'users/{user}/toggle-status',
+            [UserController::class, 'toggleStatus']
+        )->name('admin.users.toggle-status');
+
         Route::resource('enquiries', EnquiryController::class)
             ->names('admin.enquiries');
 

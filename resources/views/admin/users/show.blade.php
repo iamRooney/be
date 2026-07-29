@@ -20,13 +20,13 @@
 
                 <h3 class="fw-bold mt-3 mb-1">
 
-                    Rahul Nair
+                    {{ $user->name }}
 
                 </h3>
 
                 <p class="text-muted">
 
-                    Seller • Joined 12 June 2026
+                    {{ ucfirst($user->role ?? 'buyer') }} • Joined {{ $user->created_at->format('j F Y') }}
 
                 </p>
 
@@ -34,17 +34,22 @@
 
             <div class="d-flex gap-2">
 
-                <button class="btn btn-warning">
+                <form action="{{ route('admin.users.toggle-status', $user) }}" method="POST">
 
-                    Suspend
+                    @csrf
+                    @method('PATCH')
 
-                </button>
+                    @if ($user->status)
+                        <button type="submit" class="btn btn-warning">
+                            Suspend
+                        </button>
+                    @else
+                        <button type="submit" class="btn btn-success">
+                            Activate
+                        </button>
+                    @endif
 
-                <button class="btn btn-success">
-
-                    Activate
-
-                </button>
+                </form>
 
             </div>
 

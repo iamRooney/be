@@ -18,7 +18,7 @@
 
                 <h3 class="fw-bold text-primary">
 
-                    24
+                    {{ $stats['products'] }}
 
                 </h3>
 
@@ -30,7 +30,7 @@
 
                 <h3 class="fw-bold text-success">
 
-                    9
+                    {{ $stats['services'] }}
 
                 </h3>
 
@@ -42,7 +42,7 @@
 
                 <h3 class="fw-bold text-warning">
 
-                    36
+                    {{ $stats['enquiries'] }}
 
                 </h3>
 

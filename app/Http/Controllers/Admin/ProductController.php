@@ -28,10 +28,18 @@ class ProductController extends Controller
 
         $companies = Company::orderBy('name')->get();
 
+        $stats = [
+            'total' => Product::count(),
+            'pending' => Product::where('status', 'pending')->count(),
+            'approved' => Product::where('status', 'approved')->count(),
+            'rejected' => Product::where('status', 'rejected')->count(),
+        ];
+
         return view('admin.listings.products.index', compact(
             'products',
             'categories',
-            'companies'
+            'companies',
+            'stats'
         ));
     }
 

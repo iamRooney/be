@@ -2,14 +2,16 @@
 
     @php
 
+        $label = $label ?? 'Products';
+
         $cards = [
-            ['Total Products', 15240, 'primary', 'box-seam'],
+            ['Total ' . $label, $stats['total'], 'primary', 'box-seam'],
 
-            ['Pending', 284, 'warning', 'clock-history'],
+            ['Pending', $stats['pending'], 'warning', 'clock-history'],
 
-            ['Approved', 14500, 'success', 'check-circle'],
+            ['Approved', $stats['approved'], 'success', 'check-circle'],
 
-            ['Rejected', 456, 'danger', 'x-circle'],
+            ['Rejected', $stats['rejected'], 'danger', 'x-circle'],
         ];
 
     @endphp

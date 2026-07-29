@@ -30,7 +30,7 @@
 
         </div>
 
-        @include('admin.listings.partials.stats')
+        @include('admin.listings.partials.stats', ['label' => 'Services'])
 
         @include('admin.listings.partials.filters')
 

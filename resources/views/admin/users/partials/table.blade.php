@@ -4,7 +4,9 @@
 
         <div>
             <h5 class="fw-bold mb-1">All Users</h5>
-            <small class="text-muted">Showing 10 of 2,540 users</small>
+            <small class="text-muted">
+                Showing {{ $users->count() }} of {{ $users->total() }} users
+            </small>
         </div>
 
         <div class="d-flex gap-2">
@@ -12,9 +14,9 @@
                 <i class="bi bi-funnel"></i>
             </button>
 
-            <button class="btn btn-outline-secondary btn-sm">
+            <a href="{{ route('admin.users.index') }}" class="btn btn-outline-secondary btn-sm">
                 <i class="bi bi-arrow-clockwise"></i>
-            </button>
+            </a>
         </div>
 
     </div>
@@ -51,53 +53,7 @@
 
             <tbody>
 
-                @php
-
-                    $users = [
-                        [
-                            'name' => 'Rahul Nair',
-                            'email' => 'rahul@gmail.com',
-                            'role' => 'Seller',
-                            'company' => 'ABC Electronics',
-                            'phone' => '+91 9876543210',
-                            'joined' => '2 days ago',
-                            'status' => 'Active',
-                        ],
-
-                        [
-                            'name' => 'Anjali Menon',
-                            'email' => 'anjali@gmail.com',
-                            'role' => 'Buyer',
-                            'company' => '-',
-                            'phone' => '+91 9876501234',
-                            'joined' => '5 days ago',
-                            'status' => 'Active',
-                        ],
-
-                        [
-                            'name' => 'Vishnu Raj',
-                            'email' => 'vishnu@gmail.com',
-                            'role' => 'Seller',
-                            'company' => 'Prime Industries',
-                            'phone' => '+91 9898989898',
-                            'joined' => '1 week ago',
-                            'status' => 'Suspended',
-                        ],
-
-                        [
-                            'name' => 'Arun Joseph',
-                            'email' => 'arun@gmail.com',
-                            'role' => 'Buyer',
-                            'company' => '-',
-                            'phone' => '+91 9000000000',
-                            'joined' => '2 weeks ago',
-                            'status' => 'Active',
-                        ],
-                    ];
-
-                @endphp
-
-                @foreach ($users as $user)
+                @forelse ($users as $user)
                     <tr>
 
                         <td>
@@ -110,7 +66,7 @@
 
                                 <div class="user-avatar">
 
-                                    {{ strtoupper(substr($user['name'], 0, 1)) }}
+                                    {{ strtoupper(substr($user->name, 0, 1)) }}
 
                                 </div>
 
@@ -118,13 +74,13 @@
 
                                     <div class="fw-semibold">
 
-                                        {{ $user['name'] }}
+                                        {{ $user->name }}
 
                                     </div>
 
                                     <small class="text-muted">
 
-                                        {{ $user['email'] }}
+                                        {{ $user->email ?? '—' }}
 
                                     </small>
 
@@ -136,7 +92,7 @@
 
                         <td>
 
-                            @if ($user['role'] == 'Seller')
+                            @if ($user->role === 'seller')
                                 <span class="badge bg-primary-subtle text-primary">
 
                                     Seller
@@ -145,7 +101,7 @@
                             @else
                                 <span class="badge bg-success-subtle text-success">
 
-                                    Buyer
+                                    {{ ucfirst($user->role ?? 'buyer') }}
 
                                 </span>
                             @endif
@@ -154,25 +110,25 @@
 
                         <td>
 
-                            {{ $user['company'] }}
+                            {{ $user->company->name ?? '-' }}
 
                         </td>
 
                         <td>
 
-                            {{ $user['phone'] }}
+                            {{ $user->phone }}
 
                         </td>
 
                         <td>
 
-                            {{ $user['joined'] }}
+                            {{ $user->created_at->diffForHumans() }}
 
                         </td>
 
                         <td>
 
-                            @if ($user['status'] == 'Active')
+                            @if ($user->status)
                                 <span class="badge bg-success-subtle text-success">
 
                                     Active
@@ -202,7 +158,7 @@
 
                                     <li>
 
-                                        <a class="dropdown-item" href="{{ route('admin.users.show', 1) }}">
+                                        <a class="dropdown-item" href="{{ route('admin.users.show', $user) }}">
 
                                             <i class="bi bi-eye me-2"></i>
 
@@ -214,25 +170,30 @@
 
                                     <li>
 
-                                        <a class="dropdown-item text-warning" href="#">
+                                        <form action="{{ route('admin.users.toggle-status', $user) }}" method="POST">
 
-                                            <i class="bi bi-pause-circle me-2"></i>
+                                            @csrf
+                                            @method('PATCH')
 
-                                            Suspend
+                                            @if ($user->status)
+                                                <button type="submit" class="dropdown-item text-warning">
 
-                                        </a>
+                                                    <i class="bi bi-pause-circle me-2"></i>
 
-                                    </li>
+                                                    Suspend
 
-                                    <li>
+                                                </button>
+                                            @else
+                                                <button type="submit" class="dropdown-item text-success">
 
-                                        <a class="dropdown-item text-success" href="#">
+                                                    <i class="bi bi-check-circle me-2"></i>
 
-                                            <i class="bi bi-check-circle me-2"></i>
+                                                    Activate
 
-                                            Activate
+                                                </button>
+                                            @endif
 
-                                        </a>
+                                        </form>
 
                                     </li>
 
@@ -243,7 +204,13 @@
                         </td>
 
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="8" class="text-center text-muted py-5">
+                            No users found.
+                        </td>
+                    </tr>
+                @endforelse
 
             </tbody>
 
@@ -253,37 +220,7 @@
 
     <div class="card-footer bg-white">
 
-        <nav>
-
-            <ul class="pagination justify-content-end mb-0">
-
-                <li class="page-item disabled">
-
-                    <a class="page-link">Previous</a>
-
-                </li>
-
-                <li class="page-item active">
-
-                    <a class="page-link">1</a>
-
-                </li>
-
-                <li class="page-item">
-
-                    <a class="page-link">2</a>
-
-                </li>
-
-                <li class="page-item">
-
-                    <a class="page-link">Next</a>
-
-                </li>
-
-            </ul>
-
-        </nav>
+        {{ $users->links() }}
 
     </div>
 
