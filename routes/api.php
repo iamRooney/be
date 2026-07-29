@@ -24,10 +24,12 @@ Route::apiResource('states', StateController::class);
 Route::apiResource('cities', CityController::class);
 
 Route::apiResource('companies', CompanyController::class)->only([
-    'index', 'show'
+    'index',
+    'show'
 ]);
 Route::apiResource('categories', CategoryController::class)->only([
-    'index', 'show'
+    'index',
+    'show'
 ]);
 
 Route::get('/search', [SearchController::class, 'search']);
@@ -56,7 +58,10 @@ Route::prefix('admin')->group(function () {
         Route::patch('services/{service}/feature', [ServiceController::class, 'toggleFeatured']);
 
         Route::apiResource('enquiries', AdminEnquiryController::class)->only([
-            'index', 'show', 'update', 'destroy'
+            'index',
+            'show',
+            'update',
+            'destroy'
         ]);
     });
 });
@@ -66,15 +71,22 @@ Route::prefix('admin')->group(function () {
 Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     Route::apiResource('companies', CompanyController::class)->only([
-        'store', 'update', 'destroy'
+        'store',
+        'update',
+        'destroy'
     ]);
 
     Route::apiResource('categories', CategoryController::class)->only([
-        'store', 'update', 'destroy'
+        'store',
+        'update',
+        'destroy'
     ]);
 
     Route::apiResource('users', UserController::class)->only([
-        'index', 'show', 'update', 'destroy',
+        'index',
+        'show',
+        'update',
+        'destroy',
     ]);
 });
 
