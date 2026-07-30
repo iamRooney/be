@@ -54,6 +54,17 @@ class User extends Authenticatable
         ];
     }
 
+    protected $appends = [
+        'profile_image_url',
+    ];
+
+    public function getProfileImageUrlAttribute(): ?string
+    {
+        return $this->profile_image
+            ? asset('storage/' . $this->profile_image)
+            : null;
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Relationships

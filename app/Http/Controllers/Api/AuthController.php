@@ -16,17 +16,36 @@ class AuthController extends Controller
     {
         $request->validate([
             'phone' => ['required', 'string', 'min:10', 'max:15'],
+            'mode' => ['required', 'in:login,register'],
         ]);
+
+        $existingUser = User::where('phone', $request->phone)->first();
+
+        if ($request->mode === 'login' && !$existingUser) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No account found with this number. Please register first.',
+            ], 404);
+        }
+
+        if (
+            $request->mode === 'register'
+            && $existingUser
+            && $existingUser->is_profile_completed
+        ) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This number is already registered. Please login instead.',
+            ], 409);
+        }
 
         $otp = rand(100000, 999999);
 
-        $user = User::firstOrCreate(
-            ['phone' => $request->phone],
-            [
-                'name' => 'New User',
-                'status' => true,
-            ]
-        );
+        $user = $existingUser ?? User::create([
+            'phone' => $request->phone,
+            'name' => 'New User',
+            'status' => true,
+        ]);
 
         $user->update([
             'otp' => $otp,

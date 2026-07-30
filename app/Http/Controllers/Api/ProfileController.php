@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class ProfileController extends Controller
@@ -20,12 +21,27 @@ class ProfileController extends Controller
                 'role' => 'required|in:buyer,seller',
                 'name' => 'required|string|max:255',
                 'email' => 'nullable|email|unique:users,email,' . $user->id,
+                'profile_image' => 'nullable|image|max:2048', // 2MB
             ]);
+
+            $profileImagePath = $user->profile_image;
+
+            if ($request->hasFile('profile_image')) {
+
+                // Remove the old image so uploads don't pile up
+                if ($profileImagePath) {
+                    Storage::disk('public')->delete($profileImagePath);
+                }
+
+                $profileImagePath = $request->file('profile_image')
+                    ->store('profile-images', 'public');
+            }
 
             $user->update([
                 'name' => $request->name,
                 'email' => $request->email,
                 'role' => $request->role,
+                'profile_image' => $profileImagePath,
             ]);
 
             if ($request->role === 'buyer') {

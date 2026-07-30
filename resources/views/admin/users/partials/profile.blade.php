@@ -6,7 +6,12 @@
 
             <div class="user-profile-avatar">
 
-                {{ strtoupper(substr($user->name, 0, 1)) }}
+                @if ($user->profile_image_url)
+                    <img src="{{ $user->profile_image_url }}" alt="{{ $user->name }}"
+                        style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                @else
+                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                @endif
 
             </div>
 
