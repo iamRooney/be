@@ -8,7 +8,8 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\Api\Admin\ProductController;
+use App\Http\Controllers\ProductController;
+// use App\Http\Controllers\Api\Admin\ProductController;
 use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\Admin\AuthController as AdminAuthController;
@@ -32,6 +33,9 @@ Route::apiResource('categories', CategoryController::class)->only([
     'index',
     'show'
 ]);
+
+Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/{slug}', [ProductController::class, 'show']);
 
 Route::get('/search', [SearchController::class, 'search']);
 

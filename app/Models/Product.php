@@ -48,6 +48,17 @@ class Product extends Model
 
     ];
 
+    protected $appends = [
+        'image_url',
+    ];
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image
+            ? asset('storage/' . $this->image)
+            : null;
+    }
+
     protected static function boot()
     {
         parent::boot();

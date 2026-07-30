@@ -17,6 +17,16 @@ class Category extends Model
         'description',
         'status'
     ];
+
+    protected $appends = ['icon_url'];
+
+    public function getIconUrlAttribute(): ?string
+    {
+        return $this->icon
+            ? url('uploads/categories/' . $this->icon)
+            : null;
+    }
+
     public function products()
     {
         return $this->hasMany(Product::class);

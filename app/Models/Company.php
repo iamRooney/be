@@ -46,6 +46,17 @@ class Company extends Model
         'status'
     ];
 
+    protected $appends = [
+        'logo_url',
+    ];
+
+    public function getLogoUrlAttribute(): ?string
+    {
+        return $this->logo
+            ? asset('storage/' . $this->logo)
+            : null;
+    }
+
     public function country()
     {
         return $this->belongsTo(Country::class);
