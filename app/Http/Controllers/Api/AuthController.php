@@ -39,7 +39,7 @@ class AuthController extends Controller
             ], 409);
         }
 
-        $otp = rand(100000, 999999);
+        $otp = rand(1000, 9999);
 
         $user = $existingUser ?? User::create([
             'phone' => $request->phone,
@@ -70,7 +70,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'phone' => ['required', 'string'],
-            'otp' => ['required', 'digits:6'],
+            'otp' => ['required', 'digits:4'],
         ]);
 
         $user = User::where('phone', $request->phone)->first();
