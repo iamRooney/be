@@ -76,11 +76,19 @@ class CompanyController extends Controller
         ], 201);
     }
 
-    public function show(Company $company)
+    public function show(string $slug)
     {
-        return response()->json(
-            $company->load(['country', 'state', 'city'])
-        );
+        $company = Company::with(['country', 'state', 'city'])
+            ->withCount([
+                'products as approved_products_count' => function ($query) {
+                    $query->where('status', 'approved');
+                },
+            ])
+            ->where('slug', $slug)
+            ->where('status', true)
+            ->firstOrFail();
+
+        return response()->json($company);
     }
 
     public function update(Request $request, Company $company)

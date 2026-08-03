@@ -27,8 +27,9 @@ Route::apiResource('cities', CityController::class);
 
 Route::apiResource('companies', CompanyController::class)->only([
     'index',
-    'show'
 ]);
+Route::get('/companies/{slug}', [CompanyController::class, 'show']);
+
 Route::apiResource('categories', CategoryController::class)->only([
     'index',
     'show'

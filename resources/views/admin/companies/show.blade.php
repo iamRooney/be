@@ -6,6 +6,14 @@
 
     <div class="container-fluid">
 
+        @if (session('success'))
+            <div class="alert alert-success shadow-sm">
+
+                {{ session('success') }}
+
+            </div>
+        @endif
+
         <div class="d-flex justify-content-between align-items-center mb-4">
 
             <div>
@@ -34,7 +42,15 @@
 
             <div class="d-flex gap-2">
 
-                @if (! $company->verified)
+                <a href="{{ route('admin.companies.edit', $company) }}" class="btn btn-light border">
+
+                    <i class="bi bi-pencil me-2"></i>
+
+                    Edit
+
+                </a>
+
+                @if (!$company->verified)
                     <form action="{{ route('admin.companies.toggle-verified', $company) }}" method="POST">
                         @csrf
                         @method('PATCH')

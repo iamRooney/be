@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\City;
 use App\Models\Company;
+use App\Models\Country;
 use App\Models\State;
 use Illuminate\Http\Request;
 
@@ -84,6 +86,59 @@ class CompanyController extends Controller
             ->values();
 
         return view('admin.companies.show', compact('company', 'stats', 'activity'));
+    }
+
+    public function edit(Company $company)
+    {
+        $countries = Country::orderBy('name')->get();
+        $states = State::orderBy('name')->get();
+        $cities = City::orderBy('name')->get();
+
+        return view('admin.companies.edit', compact('company', 'countries', 'states', 'cities'));
+    }
+
+    public function update(Request $request, Company $company)
+    {
+        $request->validate([
+            'country_id' => 'required|exists:countries,id',
+            'state_id' => 'required|exists:states,id',
+            'city_id' => 'required|exists:cities,id',
+
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:companies,email,' . $company->id,
+            'phone' => 'required|string|max:20',
+
+            'website' => 'nullable|string|max:255',
+            'gst_number' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'address' => 'nullable|string|max:255',
+
+            'years_in_business' => 'nullable|integer|min:0',
+            'annual_turnover' => 'nullable|string|max:255',
+            'staff_count' => 'nullable|integer|min:0',
+            'response_rate' => 'nullable|integer|min:0|max:100',
+        ]);
+
+        $company->update($request->only([
+            'country_id',
+            'state_id',
+            'city_id',
+            'name',
+            'email',
+            'phone',
+            'website',
+            'gst_number',
+            'description',
+            'address',
+            'years_in_business',
+            'annual_turnover',
+            'staff_count',
+            'response_rate',
+        ]));
+
+        return redirect()
+            ->route('admin.companies.show', $company)
+            ->with('success', 'Company details updated successfully.');
     }
 
     public function toggleVerified(Company $company)

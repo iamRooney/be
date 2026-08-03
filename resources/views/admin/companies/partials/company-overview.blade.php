@@ -94,7 +94,39 @@
 
             </div>
 
+            <div class="col-md-6">
+
+                <p class="mb-2">
+
+                    <strong>Website</strong>
+
+                </p>
+
+                <p>
+                    @if ($company->website)
+                        <a href="{{ $company->website }}" target="_blank" rel="noopener">{{ $company->website }}</a>
+                    @else
+                        Not provided
+                    @endif
+                </p>
+
+            </div>
+
         </div>
+
+        <hr>
+
+        <p class="mb-2">
+
+            <strong>Description</strong>
+
+        </p>
+
+        <p class="mb-0 text-muted">
+
+            {{ $company->description ?: 'Not provided' }}
+
+        </p>
 
     </div>
 

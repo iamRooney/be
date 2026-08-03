@@ -68,6 +68,12 @@ class ProfileController extends Controller
                 'country_id' => 'required|exists:countries,id',
                 'state_id' => 'required|exists:states,id',
                 'city_id' => 'required|exists:cities,id',
+
+                'website' => 'nullable|string|max:255',
+                'gst_number' => 'nullable|string|max:255',
+                'description' => 'nullable|string',
+                'address' => 'nullable|string|max:255',
+                'years_in_business' => 'nullable|integer|min:0',
             ]);
 
             Company::create([
@@ -86,6 +92,16 @@ class ProfileController extends Controller
                 'phone' => $user->phone,
 
                 'email' => $user->email,
+
+                'website' => $request->website,
+
+                'gst_number' => $request->gst_number,
+
+                'description' => $request->description,
+
+                'address' => $request->address,
+
+                'years_in_business' => $request->years_in_business ?? 0,
 
                 // For sellers, the image uploaded on this screen represents
                 // their company logo, not a personal user avatar.
