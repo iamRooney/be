@@ -6,7 +6,11 @@
 
             <div class="company-avatar">
 
-                {{ strtoupper(substr($company->name, 0, 1)) }}
+                @if ($company->logo_url)
+                    <img src="{{ $company->logo_url }}" alt="{{ $company->name }}">
+                @else
+                    {{ strtoupper(substr($company->name, 0, 1)) }}
+                @endif
 
             </div>
 
@@ -118,6 +122,18 @@
         font-weight: 700;
 
         color: white;
+
+        overflow: hidden;
+
+    }
+
+    .company-avatar img {
+
+        width: 100%;
+
+        height: 100%;
+
+        object-fit: cover;
 
     }
 </style>

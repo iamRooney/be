@@ -5,7 +5,8 @@
         <div>
             <h5 class="fw-bold mb-1">All Companies</h5>
             <small class="text-muted">
-                Showing {{ $companies->firstItem() ?? 0 }}-{{ $companies->lastItem() ?? 0 }} of {{ $companies->total() }} companies
+                Showing {{ $companies->firstItem() ?? 0 }}-{{ $companies->lastItem() ?? 0 }} of
+                {{ $companies->total() }} companies
             </small>
         </div>
 
@@ -70,7 +71,11 @@
 
                                 <div class="company-logo me-3">
 
-                                    {{ strtoupper(substr($company->name, 0, 1)) }}
+                                    @if ($company->logo_url)
+                                        <img src="{{ $company->logo_url }}" alt="{{ $company->name }}">
+                                    @else
+                                        {{ strtoupper(substr($company->name, 0, 1)) }}
+                                    @endif
 
                                 </div>
 
@@ -144,10 +149,11 @@
 
                                     </li>
 
-                                    @if (! $company->verified)
+                                    @if (!$company->verified)
                                         <li>
 
-                                            <form action="{{ route('admin.companies.toggle-verified', $company) }}" method="POST">
+                                            <form action="{{ route('admin.companies.toggle-verified', $company) }}"
+                                                method="POST">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" class="dropdown-item text-success">
@@ -160,7 +166,8 @@
                                     @else
                                         <li>
 
-                                            <form action="{{ route('admin.companies.toggle-verified', $company) }}" method="POST">
+                                            <form action="{{ route('admin.companies.toggle-verified', $company) }}"
+                                                method="POST">
                                                 @csrf
                                                 @method('PATCH')
                                                 <button type="submit" class="dropdown-item text-danger">
@@ -211,6 +218,13 @@
         justify-content: center;
         font-weight: 700;
         font-size: 18px;
+        overflow: hidden;
+    }
+
+    .company-logo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 
     .table tbody tr {

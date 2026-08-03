@@ -86,6 +86,10 @@ class ProfileController extends Controller
                 'phone' => $user->phone,
 
                 'email' => $user->email,
+
+                // For sellers, the image uploaded on this screen represents
+                // their company logo, not a personal user avatar.
+                'logo' => $profileImagePath,
             ]);
 
             $user->update([

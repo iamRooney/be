@@ -49,7 +49,10 @@ class SearchController extends Controller
                 $q->where(function ($inner) use ($query) {
 
                     $inner->where('name', 'LIKE', "%{$query}%")
-                        ->orWhere('short_description', 'LIKE', "%{$query}%");
+                        ->orWhere('short_description', 'LIKE', "%{$query}%")
+                        ->orWhereHas('category', function ($category) use ($query) {
+                            $category->where('name', 'LIKE', "%{$query}%");
+                        });
                 });
             })
 
@@ -79,7 +82,10 @@ class SearchController extends Controller
                 $q->where(function ($inner) use ($query) {
 
                     $inner->where('name', 'LIKE', "%{$query}%")
-                        ->orWhere('short_description', 'LIKE', "%{$query}%");
+                        ->orWhere('short_description', 'LIKE', "%{$query}%")
+                        ->orWhereHas('category', function ($category) use ($query) {
+                            $category->where('name', 'LIKE', "%{$query}%");
+                        });
                 });
             })
 
