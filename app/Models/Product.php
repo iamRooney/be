@@ -50,6 +50,7 @@ class Product extends Model
 
     protected $appends = [
         'image_url',
+        'gallery_urls',
     ];
 
     public function getImageUrlAttribute(): ?string
@@ -57,6 +58,19 @@ class Product extends Model
         return $this->image
             ? asset('storage/' . $this->image)
             : null;
+    }
+
+    /**
+     * `gallery` stores raw storage paths; resolve them to absolute URLs
+     * the same way `image_url` does, so the frontend never has to guess.
+     */
+    public function getGalleryUrlsAttribute(): array
+    {
+        return collect($this->gallery ?? [])
+            ->filter()
+            ->map(fn ($path) => asset('storage/' . $path))
+            ->values()
+            ->all();
     }
 
     protected static function boot()

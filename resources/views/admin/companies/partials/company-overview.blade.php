@@ -133,29 +133,27 @@
 </div>
 
 <style>
-    .company-avatar {
+    .company-avatar width: 90px;
 
-        width: 90px;
+    height: 90px;
 
-        height: 90px;
+    border-radius: 18px;
 
-        border-radius: 18px;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
 
-        background: linear-gradient(135deg, #2563eb, #4f46e5);
+    display: flex;
 
-        display: flex;
+    align-items: center;
 
-        align-items: center;
+    justify-content: center;
 
-        justify-content: center;
+    font-size: 36px;
 
-        font-size: 36px;
+    font-weight: 700;
 
-        font-weight: 700;
+    color: white;
 
-        color: white;
-
-        overflow: hidden;
+    overflow: hidden;
 
     }
 

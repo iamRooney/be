@@ -36,7 +36,7 @@ class ProductController extends Controller
 
     public function show(string $slug)
     {
-        $product = Product::with(['company', 'category'])
+        $product = Product::with(['company.city', 'company.state', 'company.country', 'category'])
             ->where('slug', $slug)
             ->where('status', 'approved')
             ->firstOrFail();
