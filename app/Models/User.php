@@ -80,4 +80,10 @@ class User extends Authenticatable
     {
         return $this->hasOne(Company::class);
     }
+
+    /** Companies this buyer has liked/saved from the homepage. */
+    public function savedCompanies()
+    {
+        return $this->belongsToMany(Company::class, 'saved_companies')->withTimestamps();
+    }
 }

@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Api\Admin\EnquiryController as AdminEnquiryController;
 use App\Http\Controllers\Api\EnquiryController;
+use App\Http\Controllers\Api\SavedCompanyController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProfileController;
@@ -114,6 +115,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::post('/enquiries', [EnquiryController::class, 'store']);
+
+    Route::get('/saved-companies', [SavedCompanyController::class, 'index']);
+    Route::post('/saved-companies', [SavedCompanyController::class, 'store']);
+    Route::delete('/saved-companies/{company}', [SavedCompanyController::class, 'destroy']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {

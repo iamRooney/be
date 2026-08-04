@@ -1,0 +1,30 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('saved_companies', function (Blueprint $table) {
+
+            $table->id();
+
+            // Buyer who saved the company (the "like" button on the homepage)
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+
+            $table->timestamps();
+
+            $table->unique(['user_id', 'company_id']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('saved_companies');
+    }
+};
