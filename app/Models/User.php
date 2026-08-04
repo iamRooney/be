@@ -86,4 +86,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Company::class, 'saved_companies')->withTimestamps();
     }
+
+    /** Products this buyer has viewed, most-recent-touch per product (see RecentlyViewedController). */
+    public function recentlyViewedProducts()
+    {
+        return $this->hasMany(RecentlyViewedProduct::class);
+    }
 }
