@@ -37,15 +37,39 @@ class RequirementController extends Controller
         return response()->json(['success' => true, 'data' => $requirements]);
     }
 
+    /**
+     * Open leads matching the seller's categories, PLUS anything this
+     * seller's own company has already accepted — accepted requirements
+     * must stay visible instead of disappearing once they flip out of
+     * 'open' status.
+     */
     private function indexForSeller($user)
     {
         $categoryIds = $this->sellerCategoryIds($user->id);
+        $company = Company::where('user_id', $user->id)->first();
 
-        $requirements = Requirement::with(['category:id,name,slug', 'buyer:id,name'])
-            ->whereIn('category_id', $categoryIds)
-            ->where('status', 'open')
+        $requirements = Requirement::with(['category:id,name,slug', 'buyer:id,name,phone'])
+            ->where(function ($query) use ($categoryIds, $company) {
+                $query->where(function ($open) use ($categoryIds) {
+                    $open->whereIn('category_id', $categoryIds)->where('status', 'open');
+                });
+
+                if ($company) {
+                    $query->orWhere('accepted_by_company_id', $company->id);
+                }
+            })
             ->orderByDesc('created_at')
             ->get();
+
+        // Only reveal the buyer's phone number once *this* seller has won
+        // the requirement — everyone else just sees it's open.
+        $requirements->each(function ($requirement) use ($company) {
+            $wonByThisCompany = $company && $requirement->accepted_by_company_id === $company->id;
+
+            if (!$wonByThisCompany && $requirement->buyer) {
+                $requirement->buyer->makeHidden('phone');
+            }
+        });
 
         return response()->json(['success' => true, 'data' => $requirements]);
     }
@@ -63,7 +87,10 @@ class RequirementController extends Controller
             'title' => 'required|string|max:255',
             'quantity' => 'required|integer|min:1',
             'unit' => 'nullable|string|max:50',
-            'phone' => 'required|string|max:20',
+            // Optional — the buyer's account phone is what sellers see once
+            // they accept. This is just a backup number in case that one
+            // doesn't pick up.
+            'alternate_phone' => 'nullable|string|max:20',
         ]);
 
         $requirement = Requirement::create([
@@ -72,7 +99,7 @@ class RequirementController extends Controller
             'title' => $data['title'],
             'quantity' => $data['quantity'],
             'unit' => $data['unit'] ?? 'Pieces',
-            'phone' => $data['phone'],
+            'alternate_phone' => $data['alternate_phone'] ?? null,
             'status' => 'open',
         ]);
 
@@ -110,8 +137,8 @@ class RequirementController extends Controller
             abort(403, 'Complete your company profile before accepting requirements.');
         }
 
-        if (!$this->sellerCategoryIds($user->id)->contains($requirement->category_id)) {
-            abort(403, 'This requirement is outside the categories your company lists.');
+        if (!$this->sellerMatchesRequirement($user->id, $requirement)) {
+            abort(403, 'This requirement is outside what your company lists.');
         }
 
         $accepted = DB::transaction(function () use ($requirement, $company) {
@@ -145,16 +172,81 @@ class RequirementController extends Controller
         ]);
     }
 
+    /**
+     * Category ids a seller's company matches — both the exact ids their
+     * products/services are listed under, AND any other category row that
+     * shares the same name. `categories.name` isn't unique (only `slug`
+     * is), so a buyer's requirement and a seller's product can end up
+     * pointing at two different rows for what is really the same category
+     * — without this, those requirements would never show up for the
+     * seller even though the categories look identical everywhere.
+     */
     private function sellerCategoryIds(int $userId)
     {
         $companyIds = Company::where('user_id', $userId)->pluck('id');
 
-        return DB::table('products')
+        $directIds = DB::table('products')
             ->whereIn('company_id', $companyIds)
             ->pluck('category_id')
             ->merge(
                 DB::table('services')->whereIn('company_id', $companyIds)->pluck('category_id')
             )
             ->unique();
+
+        $names = DB::table('categories')
+            ->whereIn('id', $directIds)
+            ->pluck('name')
+            ->unique();
+
+        $namedIds = DB::table('categories')
+            ->whereIn('name', $names)
+            ->pluck('id');
+
+        return $directIds->merge($namedIds)->unique();
+    }
+
+    /**
+     * Significant lowercase words pulled from a seller's product/service
+     * names (stop words and short words dropped, naive plural stripping),
+     * used to catch requirements whose title matches a seller's product
+     * even when the category doesn't line up — e.g. a "Cat food" product
+     * mistakenly listed under Healthcare instead of Food & Beverage should
+     * still see a "Cat foods" requirement.
+     */
+    private function sellerProductWords(int $userId)
+    {
+        $companyIds = Company::where('user_id', $userId)->pluck('id');
+
+        $names = DB::table('products')->whereIn('company_id', $companyIds)->pluck('name')
+            ->merge(DB::table('services')->whereIn('company_id', $companyIds)->pluck('name'));
+
+        $stopWords = ['the', 'and', 'for', 'with', 'pack', 'set', 'new'];
+
+        return $names
+            ->flatMap(fn ($name) => preg_split('/[^a-z0-9]+/i', strtolower($name)))
+            ->map(fn ($word) => rtrim($word, 's'))
+            ->filter(fn ($word) => strlen($word) >= 3 && !in_array($word, $stopWords, true))
+            ->unique()
+            ->values();
+    }
+
+    /**
+     * Whether a seller can see/accept a given requirement — same rule used
+     * for both the dashboard list and the accept-authorization check:
+     * category match OR product-name word overlap with the title.
+     */
+    private function sellerMatchesRequirement(int $userId, Requirement $requirement): bool
+    {
+        if ($this->sellerCategoryIds($userId)->contains($requirement->category_id)) {
+            return true;
+        }
+
+        $productWords = $this->sellerProductWords($userId);
+
+        $titleWords = collect(preg_split('/[^a-z0-9]+/i', strtolower($requirement->title)))
+            ->map(fn ($word) => rtrim($word, 's'))
+            ->filter(fn ($word) => strlen($word) >= 3);
+
+        return $titleWords->intersect($productWords)->isNotEmpty();
     }
 }

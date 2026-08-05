@@ -30,14 +30,21 @@
             </div>
 
             <div class="col-sm-6">
-                <small class="text-muted d-block">Contact Number</small>
-                <div class="fw-semibold">{{ $requirement->phone }}</div>
+                <small class="text-muted d-block">Buyer Phone</small>
+                <div class="fw-semibold">{{ $requirement->buyer->phone ?? '-' }}</div>
             </div>
 
             <div class="col-sm-6">
                 <small class="text-muted d-block">Posted By</small>
                 <div class="fw-semibold">{{ $requirement->buyer->name ?? '-' }}</div>
             </div>
+
+            @if($requirement->alternate_phone)
+                <div class="col-sm-6">
+                    <small class="text-muted d-block">Alternate Number</small>
+                    <div class="fw-semibold">{{ $requirement->alternate_phone }}</div>
+                </div>
+            @endif
 
             <div class="col-sm-6">
                 <small class="text-muted d-block">Posted On</small>

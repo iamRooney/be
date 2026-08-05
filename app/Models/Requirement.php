@@ -17,7 +17,7 @@ class Requirement extends Model
         'title',
         'quantity',
         'unit',
-        'phone',
+        'alternate_phone',
         'status',
         'accepted_by_company_id',
         'accepted_at',
