@@ -14,7 +14,8 @@
 
         <div class="d-grid gap-2">
 
-            <form action="{{ route('admin.requirements.update', $requirement) }}" method="POST">
+            <form action="{{ route('admin.requirements.update', $requirement) }}" method="POST"
+                onsubmit="return confirm('{{ $requirement->status == 'closed' ? 'Reopen this requirement? It will become visible to matching sellers again.' : 'Close this requirement? It will stop showing up for sellers.' }}')">
                 @csrf
                 @method('PATCH')
                 <input type="hidden" name="status"
