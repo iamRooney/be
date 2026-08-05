@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Api\Admin\EnquiryController as AdminEnquiryController;
 use App\Http\Controllers\Api\EnquiryController;
 use App\Http\Controllers\Api\RecentlyViewedController;
+use App\Http\Controllers\Api\RequirementController;
 use App\Http\Controllers\Api\SavedCompanyController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
@@ -124,6 +125,12 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/recently-viewed', [RecentlyViewedController::class, 'index']);
     Route::post('/recently-viewed', [RecentlyViewedController::class, 'store']);
+
+    // "Post Your Requirement" — buyers post, sellers see matches by category,
+    // first seller to accept gets it. See RequirementController for details.
+    Route::get('/requirements', [RequirementController::class, 'index']);
+    Route::post('/requirements', [RequirementController::class, 'store']);
+    Route::post('/requirements/{requirement}/accept', [RequirementController::class, 'accept']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {

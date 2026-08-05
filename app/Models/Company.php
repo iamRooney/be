@@ -87,6 +87,12 @@ class Company extends Model
         return $this->hasMany(Enquiry::class);
     }
 
+    /** Requirements this company won by being first to accept. */
+    public function acceptedRequirements()
+    {
+        return $this->hasMany(Requirement::class, 'accepted_by_company_id');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

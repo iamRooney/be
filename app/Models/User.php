@@ -92,4 +92,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(RecentlyViewedProduct::class);
     }
+
+    /** Requirements ("Post Your Requirement" / RFQs) this buyer has posted. */
+    public function requirements()
+    {
+        return $this->hasMany(Requirement::class);
+    }
 }

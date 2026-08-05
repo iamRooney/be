@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\EnquiryController;
+use App\Http\Controllers\Admin\RequirementController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ServiceController;
 
@@ -65,6 +66,10 @@ Route::prefix('admin')->group(function () {
 
         Route::resource('enquiries', EnquiryController::class)
             ->names('admin.enquiries');
+
+        // Post Your Requirement (RFQ)
+        Route::resource('requirements', RequirementController::class)
+            ->names('admin.requirements');
 
         Route::prefix('listings')->name('admin.listings.')->group(function () {
 

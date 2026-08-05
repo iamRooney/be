@@ -55,6 +55,12 @@
         <span>Enquiries</span>
     </a>
 
+    <a href="{{ navLink('admin.requirements.index') }}" title="RFQ"
+        class="menu-item {{ str_contains($route, 'requirements') ? 'active' : '' }}">
+        <i class="bi bi-file-earmark-text-fill"></i>
+        <span>RFQ</span>
+    </a>
+
     <div class="menu-title">LISTINGS</div>
 
     <a href="{{ navLink('admin.listings.products.index') }}" title="Products"
