@@ -21,7 +21,7 @@ return [
 
     // The Next.js frontend runs on :3000 during local dev. Add production
     // domains here once deployed (e.g. 'https://exbhex.com').
-    'allowed_origins' => explode(',', env('FRONTEND_URLS', 'http://localhost:3000,http://127.0.0.1:3000')),
+    'allowed_origins' => explode(',', env('FRONTEND_URLS', 'http://localhost:3000,http://127.0.0.1:3000,http://192.168.1.47:3000')),
 
     'allowed_origins_patterns' => [],
 

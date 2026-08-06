@@ -9,15 +9,24 @@ use Illuminate\Http\Request;
 
 class EnquiryController extends Controller
 {
+    /**
+     * The buyer's own enquiries — powers "My Enquiries" and the
+     * dashboard overview. Sellers don't have a user_id on enquiries
+     * (they're always the buyer side), so this is buyer-only.
+     */
     public function index(Request $request)
     {
-        $enquiries = Enquiry::where('user_id', $request->user()->id)
-            ->with([
-                'company:id,name,slug,logo',
-                'product:id,name,slug,image',
-                'service:id,name,slug',
-            ])
-            ->orderByDesc('created_at')
+        if ($request->user()->role !== 'buyer') {
+            abort(403, 'Only buyers can view their enquiries.');
+        }
+
+        $limit = min($request->integer('limit', 50), 100);
+
+        $enquiries = $request->user()
+            ->enquiries()
+            ->with(['company', 'product', 'service'])
+            ->latest()
+            ->limit($limit)
             ->get();
 
         return response()->json([

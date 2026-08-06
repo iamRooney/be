@@ -15,13 +15,12 @@ use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Api\Admin\EnquiryController as AdminEnquiryController;
 use App\Http\Controllers\Api\EnquiryController;
-use App\Http\Controllers\Api\RecentlyViewedController;
-use App\Http\Controllers\Api\RequirementController;
 use App\Http\Controllers\Api\SavedCompanyController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ProductController as SellerProductController;
+use App\Http\Controllers\Api\CompanyDocumentController;
 
 // Public APIs (read-only)
 Route::apiResource('countries', CountryController::class);
@@ -122,15 +121,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/saved-companies', [SavedCompanyController::class, 'index']);
     Route::post('/saved-companies', [SavedCompanyController::class, 'store']);
     Route::delete('/saved-companies/{company}', [SavedCompanyController::class, 'destroy']);
-
-    Route::get('/recently-viewed', [RecentlyViewedController::class, 'index']);
-    Route::post('/recently-viewed', [RecentlyViewedController::class, 'store']);
-
-    // "Post Your Requirement" — buyers post, sellers see matches by category,
-    // first seller to accept gets it. See RequirementController for details.
-    Route::get('/requirements', [RequirementController::class, 'index']);
-    Route::post('/requirements', [RequirementController::class, 'store']);
-    Route::post('/requirements/{requirement}/accept', [RequirementController::class, 'accept']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -142,4 +132,9 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::middleware('auth:sanctum')->prefix('seller')->name('seller.')->group(function () {
 
     Route::apiResource('products', SellerProductController::class)->except(['show']);
+
+    Route::get('company/documents', [CompanyDocumentController::class, 'index']);
+    Route::post('company/documents', [CompanyDocumentController::class, 'store']);
+    Route::get('company/documents/{document}', [CompanyDocumentController::class, 'show']);
+    Route::delete('company/documents/{document}', [CompanyDocumentController::class, 'destroy']);
 });

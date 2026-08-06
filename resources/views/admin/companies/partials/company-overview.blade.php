@@ -133,37 +133,24 @@
 </div>
 
 <style>
-    .company-avatar width: 90px;
-
-    height: 90px;
-
-    border-radius: 18px;
-
-    background: linear-gradient(135deg, #2563eb, #4f46e5);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: 36px;
-
-    font-weight: 700;
-
-    color: white;
-
-    overflow: hidden;
-
+    .company-avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, #2563eb, #4f46e5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+        font-weight: 700;
+        color: white;
+        overflow: hidden;
+        flex-shrink: 0;
     }
 
     .company-avatar img {
-
         width: 100%;
-
         height: 100%;
-
         object-fit: cover;
-
     }
 </style>

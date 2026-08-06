@@ -7,9 +7,9 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\EnquiryController;
-use App\Http\Controllers\Admin\RequirementController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\CompanyDocumentController as AdminCompanyDocumentController;
 
 Route::prefix('admin')->group(function () {
 
@@ -56,6 +56,21 @@ Route::prefix('admin')->group(function () {
             [CompanyController::class, 'toggleVerified']
         )->name('admin.companies.toggle-verified');
 
+        Route::get(
+            'companies/documents/{document}',
+            [AdminCompanyDocumentController::class, 'show']
+        )->name('admin.companies.documents.show');
+
+        Route::patch(
+            'companies/documents/{document}/approve',
+            [AdminCompanyDocumentController::class, 'approve']
+        )->name('admin.companies.documents.approve');
+
+        Route::patch(
+            'companies/documents/{document}/reject',
+            [AdminCompanyDocumentController::class, 'reject']
+        )->name('admin.companies.documents.reject');
+
         Route::resource('users', UserController::class)
             ->names('admin.users');
 
@@ -66,10 +81,6 @@ Route::prefix('admin')->group(function () {
 
         Route::resource('enquiries', EnquiryController::class)
             ->names('admin.enquiries');
-
-        // Post Your Requirement (RFQ)
-        Route::resource('requirements', RequirementController::class)
-            ->names('admin.requirements');
 
         Route::prefix('listings')->name('admin.listings.')->group(function () {
 

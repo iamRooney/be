@@ -54,7 +54,7 @@ class CompanyController extends Controller
 
     public function show(Company $company)
     {
-        $company->load(['country', 'state', 'city', 'user', 'products', 'services', 'enquiries']);
+        $company->load(['country', 'state', 'city', 'user', 'products', 'services', 'enquiries', 'documents']);
 
         $stats = [
             'products' => $company->products()->count(),
