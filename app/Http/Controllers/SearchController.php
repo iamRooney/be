@@ -16,19 +16,25 @@ class SearchController extends Controller
     {
         $request->validate([
             'q' => 'nullable|string|max:255',
-            'location' => 'nullable|string|max:255'
+            'location' => 'nullable|string|max:255',
+            'category' => 'nullable|string|max:255',
+            'min_price' => 'nullable|numeric|min:0',
+            'max_price' => 'nullable|numeric|min:0',
         ]);
 
         $query = trim($request->q ?? '');
         $location = trim($request->location ?? '');
+        $category = trim($request->category ?? '');
+        $minPrice = $request->min_price;
+        $maxPrice = $request->max_price;
 
         return response()->json([
             'success' => true,
             'query' => $query,
 
-            'products' => $this->products($query, $location),
+            'products' => $this->products($query, $location, $category, $minPrice, $maxPrice),
 
-            'services' => $this->services($query, $location),
+            'services' => $this->services($query, $location, $category, $minPrice, $maxPrice),
 
             'companies' => $this->companies($query, $location),
 
@@ -36,7 +42,7 @@ class SearchController extends Controller
         ]);
     }
 
-    private function products($query, $location)
+    private function products($query, $location, $category = '', $minPrice = null, $maxPrice = null)
     {
         return Product::with([
             'company',
@@ -64,12 +70,27 @@ class SearchController extends Controller
                 });
             })
 
+            ->when($category, function ($q) use ($category) {
+
+                $q->whereHas('category', function ($cat) use ($category) {
+                    $cat->where('slug', $category)->orWhere('name', $category);
+                });
+            })
+
+            ->when($minPrice !== null, function ($q) use ($minPrice) {
+                $q->where('price', '>=', $minPrice);
+            })
+
+            ->when($maxPrice !== null, function ($q) use ($maxPrice) {
+                $q->where('price', '<=', $maxPrice);
+            })
+
             ->limit(8)
 
             ->get();
     }
 
-    private function services($query, $location)
+    private function services($query, $location, $category = '', $minPrice = null, $maxPrice = null)
     {
         return Service::with([
             'company',
@@ -95,6 +116,21 @@ class SearchController extends Controller
 
                     $city->where('name', 'LIKE', "%{$location}%");
                 });
+            })
+
+            ->when($category, function ($q) use ($category) {
+
+                $q->whereHas('category', function ($cat) use ($category) {
+                    $cat->where('slug', $category)->orWhere('name', $category);
+                });
+            })
+
+            ->when($minPrice !== null, function ($q) use ($minPrice) {
+                $q->where('starting_price', '>=', $minPrice);
+            })
+
+            ->when($maxPrice !== null, function ($q) use ($maxPrice) {
+                $q->where('starting_price', '<=', $maxPrice);
             })
 
             ->limit(8)

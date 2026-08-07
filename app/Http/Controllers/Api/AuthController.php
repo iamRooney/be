@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OtpMail;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
@@ -15,16 +17,32 @@ class AuthController extends Controller
     public function sendOtp(Request $request)
     {
         $request->validate([
-            'phone' => ['required', 'string', 'min:10', 'max:15'],
+            'phone' => ['required_without:email', 'nullable', 'string', 'min:10', 'max:15'],
+            'email' => ['required_without:phone', 'nullable', 'email'],
             'mode' => ['required', 'in:login,register'],
         ]);
 
-        $existingUser = User::where('phone', $request->phone)->first();
+        $usingEmail = $request->filled('email');
+
+        // Email OTP is a login-only alternative to phone; registration always
+        // requires a phone number since it's a required unique column on User.
+        if ($usingEmail && $request->mode === 'register') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please register with your phone number.',
+            ], 422);
+        }
+
+        $existingUser = $usingEmail
+            ? User::where('email', $request->email)->first()
+            : User::where('phone', $request->phone)->first();
 
         if ($request->mode === 'login' && !$existingUser) {
             return response()->json([
                 'success' => false,
-                'message' => 'No account found with this number. Please register first.',
+                'message' => $usingEmail
+                    ? 'No account found with this email. Please register first.'
+                    : 'No account found with this number. Please register first.',
             ], 404);
         }
 
@@ -39,7 +57,8 @@ class AuthController extends Controller
             ], 409);
         }
 
-        $otp = rand(1000, 9999);
+        // $otp = rand(1000, 9999);
+        $otp = 1234;
 
         $user = $existingUser ?? User::create([
             'phone' => $request->phone,
@@ -52,11 +71,16 @@ class AuthController extends Controller
             'otp_expires_at' => Carbon::now()->addMinutes(5),
         ]);
 
+        if ($usingEmail) {
+            Mail::to($user->email)->send(new OtpMail((string) $otp));
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'OTP sent successfully.',
             'data' => [
                 'phone' => $user->phone,
+                'email' => $user->email,
                 'otp' => $otp, // Remove this in production
                 'expires_at' => $user->otp_expires_at,
             ],
@@ -69,11 +93,14 @@ class AuthController extends Controller
     public function verifyOtp(Request $request)
     {
         $request->validate([
-            'phone' => ['required', 'string'],
+            'phone' => ['required_without:email', 'nullable', 'string'],
+            'email' => ['required_without:phone', 'nullable', 'email'],
             'otp' => ['required', 'digits:4'],
         ]);
 
-        $user = User::where('phone', $request->phone)->first();
+        $user = $request->filled('email')
+            ? User::where('email', $request->email)->first()
+            : User::where('phone', $request->phone)->first();
 
         if (!$user) {
             return response()->json([
