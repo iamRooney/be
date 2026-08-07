@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ProductController as SellerProductController;
 use App\Http\Controllers\Api\CompanyDocumentController;
+use App\Http\Controllers\Api\RecentlyViewedController;
 
 // Public APIs (read-only)
 Route::apiResource('countries', CountryController::class);
@@ -127,6 +128,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/saved-companies', [SavedCompanyController::class, 'index']);
     Route::post('/saved-companies', [SavedCompanyController::class, 'store']);
     Route::delete('/saved-companies/{company}', [SavedCompanyController::class, 'destroy']);
+
+    Route::get('/recently-viewed', [RecentlyViewedController::class, 'index']);
+    Route::post('/recently-viewed', [RecentlyViewedController::class, 'store']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {

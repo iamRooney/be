@@ -20,7 +20,7 @@ class ProfileController extends Controller
             $request->validate([
                 'role' => 'required|in:buyer,seller',
                 'name' => 'required|string|max:255',
-                'email' => 'nullable|email|unique:users,email,' . $user->id,
+                'email' => 'required|email|unique:users,email,' . $user->id,
                 'profile_image' => 'nullable|image|max:2048', // 2MB
             ]);
 

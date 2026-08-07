@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\CompanyDocumentController as SellerCompanyDocumentController;
+use App\Mail\DocumentStatusMail;
 use App\Models\CompanyDocument;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Admin review queue for seller identity/legal documents (Aadhar, PAN,
@@ -46,6 +49,8 @@ class CompanyDocumentController extends Controller
             'reviewed_at' => now(),
         ]);
 
+        $this->notifySeller($document);
+
         return response()->json([
             'success' => true,
             'message' => 'Document approved.',
@@ -66,10 +71,35 @@ class CompanyDocumentController extends Controller
             'reviewed_at' => now(),
         ]);
 
+        $this->notifySeller($document);
+
         return response()->json([
             'success' => true,
             'message' => 'Document rejected.',
             'data' => $document->fresh(['company:id,name,slug', 'reviewer:id,name']),
         ]);
+    }
+
+    /**
+     * Best-effort — a failed mail send should never fail the review action.
+     */
+    private function notifySeller(CompanyDocument $document): void
+    {
+        $document->loadMissing('company');
+
+        $companyEmail = $document->company?->email;
+
+        if (! $companyEmail) {
+            return;
+        }
+
+        try {
+            Mail::to($companyEmail)->send(new DocumentStatusMail($document));
+        } catch (\Throwable $e) {
+            Log::warning('Failed to send document status email', [
+                'document_id' => $document->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
     }
 }
