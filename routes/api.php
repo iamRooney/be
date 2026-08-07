@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\Admin\DashboardController;
 use App\Http\Controllers\Api\Admin\ServiceController;
 use App\Http\Controllers\Api\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Api\Admin\EnquiryController as AdminEnquiryController;
+use App\Http\Controllers\Api\Admin\CompanyDocumentController as AdminCompanyDocumentController;
 use App\Http\Controllers\Api\EnquiryController;
 use App\Http\Controllers\Api\SavedCompanyController;
 use App\Http\Controllers\Api\AuthController;
@@ -71,6 +72,11 @@ Route::prefix('admin')->group(function () {
             'update',
             'destroy'
         ]);
+
+        Route::get('documents', [AdminCompanyDocumentController::class, 'index']);
+        Route::get('documents/{document}', [AdminCompanyDocumentController::class, 'show']);
+        Route::patch('documents/{document}/approve', [AdminCompanyDocumentController::class, 'approve']);
+        Route::patch('documents/{document}/reject', [AdminCompanyDocumentController::class, 'reject']);
     });
 });
 

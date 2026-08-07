@@ -34,6 +34,7 @@ class CompanyDocument extends Model
     public const TYPES = [
         'gst_certificate' => 'GST Certificate',
         'pan_card' => 'PAN Card',
+        'aadhar_card' => 'Aadhar Card',
         'business_license' => 'Business License',
         'tax_record' => 'Tax Record',
         'identity_proof' => 'Identity Proof',
